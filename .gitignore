@@ -7,3 +7,4 @@ Installer/
 *.user
 *.suo
 *.docstates
+node_modules/

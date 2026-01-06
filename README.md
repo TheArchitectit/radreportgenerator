@@ -3,7 +3,7 @@
 A Windows WPF application designed to ingest Dell Live Optics assessment data (`.xlsx`), visualize key performance metrics, and act as an AI-powered research assistant for IT infrastructure analysis.
 
 ![Status](https://img.shields.io/badge/status-active-success.svg)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![License](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)
 
 ## 🚀 Features
 
@@ -88,4 +88,4 @@ This requires `npm` to be installed. It uses Inno Setup to create a professional
 
 ## 📄 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the BSD-3-Clause License. See `LICENSE` for more information.
