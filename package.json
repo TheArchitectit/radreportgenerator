@@ -1,0 +1,27 @@
+{
+  "name": "reportgenerator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:dotnet": "dotnet publish src/LiveOptics.UI.Wpf/LiveOptics.UI.Wpf.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o PortableBuild",
+    "build:installer": "node -e \"require('innosetup-compiler')('installer.iss', { gui: false, verbose: true }, (error) => { if (error) console.error(error); else console.log('Installer created successfully!'); })\"",
+    "dist": "npm run build:dotnet && npm run build:installer"
+  },
+  "devDependencies": {
+    "innosetup-compiler": "^6.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheArchitectit/radreportgenerator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/TheArchitectit/radreportgenerator/issues"
+  },
+  "homepage": "https://github.com/TheArchitectit/radreportgenerator#readme"
+}
