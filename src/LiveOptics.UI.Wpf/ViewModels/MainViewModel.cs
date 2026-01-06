@@ -6,6 +6,7 @@ using LiveOptics.Core.Services;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace LiveOptics.UI.Wpf.ViewModels
 {
