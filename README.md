@@ -89,3 +89,9 @@ This requires `npm` to be installed. It uses Inno Setup to create a professional
 ## 📄 License
 
 Distributed under the BSD-3-Clause License. See `LICENSE` for more information.
+
+## ☁️ Cloud Credits
+
+Power your AI projects with [Ozore.com](https://ozore.com) — use code **lundrog50** for 50% off your first month.
+
+> `direct-pin` and `custom-router` are available on **Pro** and **Max** plans only.
