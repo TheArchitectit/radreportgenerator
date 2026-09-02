@@ -4,7 +4,6 @@ A Windows WPF application designed to ingest Dell Live Optics assessment data (`
 
 ![Status](https://img.shields.io/badge/status-active-success.svg)
 ![License](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)
-[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-FF69B4?style=flat&logo=github-sponsors)](https://github.com/sponsors/TheArchitectit)
 
 ## 🚀 Features
 
