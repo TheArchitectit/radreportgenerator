@@ -1,14 +1,14 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using Microsoft.Win32;
-using LiveOptics.Core.Models;
-using LiveOptics.Core.Services;
+using OpenReportViewer.Core.Models;
+using OpenReportViewer.Core.Services;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace LiveOptics.UI.Wpf.ViewModels
+namespace OpenReportViewer.UI.Wpf.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {

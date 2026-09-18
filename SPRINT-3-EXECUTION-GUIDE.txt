@@ -1,35 +1,39 @@
 ================================================================================
 SPRINT 3: PDF GENERATION - DETAILED EXECUTION GUIDE
 Weeks 5-6 (10 Days) | 34 Story Points | 2 Backend Engineers
+
+*** TEMPLATE ONLY — NOT A VERIFIED IMPLEMENTATION ***
+This guide is a draft for future OpenSpec change pdf-generation-questpdf.
+QuestPDF is NOT present in src/ as of 2026-09-18. Sample C# below is not
+normative until reviewed and compiled against OpenReportViewer.Reporting.
+
+Branch policy: trunk-based on main (see openspec/changes/qa-fix-git-branch-workflow).
+Do NOT require a develop branch that does not exist.
+
+Working directory: C:\git\reportgenerator
+Solution: OpenReportViewer.sln
+Projects: src/OpenReportViewer.Core, src/OpenReportViewer.Tests, src/OpenReportViewer.UI.Wpf
+Future Reporting project: src/OpenReportViewer.Reporting (to be created)
+
+EXECUTE VIA OPENSPEC: openspec/changes/pdf-generation-questpdf/
 ================================================================================
 
-EXECUTE IN EXACT ORDER. DO NOT SKIP VALIDATION STEPS.
-
-================================================================================
 PRE-SPRINT VALIDATION (Before Day 1)
-================================================================================
 
-Step 1: Verify on develop branch
+Step 1: Verify on main (or feature branch off main)
 cd C:\git\reportgenerator
-git status | findstr "On branch develop"
-IF %ERRORLEVEL% NEQ 0 (echo ERROR: Not on develop branch & exit /b 1)
-echo [OK] On develop branch
+git status
+echo Expected: main or feature/*, not develop
 
 Step 2: Verify no uncommitted changes
 git status --porcelain
-IF %ERRORLEVEL% EQU 0 (
-    for /f "tokens=*" %%i in ('git status --porcelain') do (
-        if not "%%i"=="" (echo ERROR: Uncommitted changes & exit /b 1)
-    )
-)
-echo [OK] No uncommitted changes
 
-Step 3: Run Sprint 2 tests
-dotnet test --filter "Category=Sprint2" --logger "console;verbosity=quiet"
-IF %ERRORLEVEL% NEQ 0 (echo ERROR: Sprint 2 tests failed & exit /b 1)
-echo [OK] Sprint 2 tests passed
+Step 3: Run current tests
+build\verify-sprint0.cmd
+IF ERRORLEVEL 1 echo ERROR: tests failed & exit /b 1
+echo [OK] Current tests passed
 
-Step 4: Create license directory
+Step 4: Create license directory if needed
 if not exist docs\licenses mkdir docs\licenses
 echo [OK] Pre-sprint validation complete
 

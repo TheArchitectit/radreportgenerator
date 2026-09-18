@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LiveOptics.Core.Models
+namespace OpenReportViewer.Core.Models
 {
     public class ProjectInfo
     {

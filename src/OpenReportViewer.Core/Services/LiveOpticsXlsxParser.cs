@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Data;
 using ExcelDataReader;
-using LiveOptics.Core.Models;
+using OpenReportViewer.Core.Models;
 
-namespace LiveOptics.Core.Services
+namespace OpenReportViewer.Core.Services
 {
     public interface ILiveOpticsParser
     {

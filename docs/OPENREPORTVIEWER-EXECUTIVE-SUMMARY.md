@@ -1,84 +1,61 @@
-# OPENREPORTVIEWER TRANSFORMATION - FINAL EXECUTIVE SUMMARY
+# OPENREPORTVIEWER TRANSFORMATION - EXECUTIVE SUMMARY
+
+> **STATUS (2026-09-18) — READ THIS FIRST**  
+> This document is an **aspirational roadmap**. It is **not** a record of verified implementation.  
+> **Actual code state** is tracked in [`openspec/QA-REVIEW.md`](../openspec/QA-REVIEW.md) and [`openspec/sprints/`](../openspec/sprints/).  
+> **Sprint 3 (QuestPDF PDF MVP) is NOT implemented** in `src/`. Claims below marked COMPLETED for Sprint 3 are incorrect until `openspec/changes/pdf-generation-questpdf/` is applied and archived.
 
 ## PROJECT OVERVIEW
 
-**Current State:** LiveOptics WPF Desktop Application  
-**Target State:** OpenReportViewer Enterprise Platform  
-**Duration:** 44 weeks (11 months)  
-**Investment:** $843,000  
-**Team:** 6 FTE  
+**Current State:** OpenReportViewer WPF desktop app (Live Optics xlsx → PPTX; mock AI)  
+**Target State:** OpenReportViewer Enterprise Platform (roadmap)  
+**Duration (planned):** 44 weeks (11 months)  
+**Investment (planned):** $843,000  
+**Team (planned):** 6 FTE  
 
 ## TRANSFORMATION JOURNEY
 
-### Phase 0: Foundation (Sprints 1-2) - COMPLETED ✓
-- **Weeks 1-2:** Project restructure, core interfaces, DI container
-- **Deliverables:** OpenReportViewer-Refactored.sln, 78 unit tests, 30% coverage
-- **Key Achievement:** Solid foundation with clean architecture established
+### Phase 0: Foundation (Sprints 1-2) — PARTIAL
 
-### Phase 1: Reporting Engine (Sprints 3-8) - IN PROGRESS
-- **Sprint 3 (Weeks 5-6):** PDF Generation MVP - COMPLETED ✓
-  - QuestPDF integration
-  - Base report templates
-  - Chart integration
-  - WPF export dialog
-  - 15+ unit tests
+- **Weeks 1-2:** Project restructure — **partially done** (folders + solution + namespaces OpenReportViewer; not 7 modules, not DI, not 78 tests)
+- **Deliverables claimed:** OpenReportViewer-Refactored.sln, 78 unit tests, 30% coverage — **NOT verified** (actual: `OpenReportViewer.sln`, 55 tests)
 
-- **Sprint 4 (Weeks 7-8):** Advanced PDF Features
-  - Storage analysis section
-  - Host infrastructure section  
-  - Table of contents
-  - Performance optimization
+### Phase 1: Reporting Engine (Sprints 3-8) — NOT STARTED IN CODE
 
-- **Sprint 5-8 (Weeks 9-16):** Multi-Format Output
-  - HTML report generation (Razor + D3.js)
-  - React/TypeScript frontend SPA
-  - RESTful API endpoints
-  - File export system
+- **Sprint 3 (Weeks 5-6):** PDF Generation MVP — **NOT IMPLEMENTED**
+  - QuestPDF integration — **absent**
+  - Base report templates — **absent**
+  - WPF export dialog for PDF — **absent** (PPTX only)
+  - See `openspec/changes/pdf-generation-questpdf/`
 
-### Phase 2: OpenAPI & API Layer (Sprints 9-16)
-- **Sprint 9-10:** ASP.NET Core Web API Foundation
-- **Sprint 11-12:** Authentication & Authorization (JWT)
-- **Sprint 13-14:** Rate Limiting & Webhooks
-- **Sprint 15-16:** Background Jobs & API Versioning
+- **Sprint 4-8:** Advanced PDF, HTML, React SPA, REST API — **planned only**
 
-### Phase 3: Cloud Infrastructure (Sprints 17-22)
-- **Sprint 17-18:** Docker Containerization
-- **Sprint 19-20:** Database Layer (PostgreSQL + Redis)
-- **Sprint 21-22:** Kubernetes + Helm Charts
+### Phase 2+: API, Cloud, AI/ML, Enterprise, Launch
 
-### Phase 4: AI/ML Platform (Sprints 23-28)
-- **Sprint 23-24:** ML.NET Anomaly Detection
-- **Sprint 25-26:** Predictive Capacity Planning
-- **Sprint 27-28:** Recommendation Engine
+All **planned only**. See OpenSpec changes for gated work.
 
-### Phase 5: Enterprise Features (Sprints 29-36)
-- **Sprint 29-32:** Multi-Tenancy & RBAC
-- **Sprint 33-36:** SSO Integration & Audit Logging
+## CURRENT STATUS (verified 2026-09-18)
 
-### Phase 6: Polish & Launch (Sprints 37-44)
-- **Sprint 37-40:** Performance Optimization
-- **Sprint 41-44:** Documentation, Security Audit, Launch
+### COMPLETED ✅ (code)
 
-## CURRENT STATUS (End Sprint 3)
+- Folder/project identity: `src/OpenReportViewer.*`, `OpenReportViewer.sln`
+- Core models, Live Optics xlsx parser (server inventory), PPTX generator, mock research agent
+- WPF UI: load xlsx, dashboard KPIs, demo AI sidebar, PPTX export
+- Sprint 0: build graph, project references, packaging paths, converter resource, null contracts
+- Sprint 1: rename + this docs truth pass
+- Unit tests: **55 passed** (not 78)
 
-### COMPLETED ✅
-- Project restructure and naming
-- Core interfaces and abstractions
-- QuestPDF integration
-- Basic PDF generation
-- Chart rendering capability
-- 15+ unit tests (60% coverage)
-- Performance benchmarks met
+### IN PROGRESS 🔄 (OpenSpec sprints)
 
-### IN PROGRESS 🔄
-- Advanced PDF features (Sprint 4)
-- HTML report generation (Sprint 5)
-- React frontend development (Sprint 6)
+- Sprint 2: modular architecture, DI, real chart binding, honest AI labeling
+- Sprint 3+: PDF, RVTools, performance series (see sprints README)
 
-### UPCOMING 📅
-- API layer implementation (Sprints 9-16)
-- Cloud infrastructure (Sprints 17-22)
-- AI/ML capabilities (Sprints 23-28)
+### NOT IMPLEMENTED ❌
+
+- QuestPDF / PDF reports
+- RVTools parser
+- Performance time-series parsing
+- HTML reports, Web API, Docker/K8s, ML, SSO, multi-tenancy
 
 ## KEY ARCHITECTURE DECISIONS
 

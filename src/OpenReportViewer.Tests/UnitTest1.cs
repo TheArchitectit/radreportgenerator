@@ -1,9 +1,9 @@
 using Xunit;
-using LiveOptics.Core.Models;
-using LiveOptics.Core.Services;
+using OpenReportViewer.Core.Models;
+using OpenReportViewer.Core.Services;
 using System.Collections.Generic;
 
-namespace LiveOptics.Tests
+namespace OpenReportViewer.Tests
 {
     public class ParserTests
     {

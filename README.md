@@ -1,114 +1,111 @@
-# Live Optics Report Generator
+# OpenReportViewer
 
-A Windows WPF application designed to ingest Dell Live Optics assessment data (`.xlsx`), visualize key performance metrics, and act as an AI-powered research assistant for IT infrastructure analysis.
+Windows WPF application that ingests Dell Live Optics / RVTools assessment data (`.xlsx`), visualizes key performance metrics, and generates PowerPoint reports. Includes a demo research-agent sidebar (simulated insights).
 
 ![Status](https://img.shields.io/badge/status-active-success.svg)
 ![License](https://img.shields.io/badge/license-BSD--3--Clause-blue.svg)
-[![Sponsor](https://img.shields.io/badge/Sponsor-TheArchitectit-FF69B4?style=flat&logo=github-sponsors)](https://github.com/sponsors/TheArchitectit)
 
-## 🚀 Features
+## Status (verified)
 
-*   **Data Visualization**: Instantly graph IOPS and Throughput trends from Live Optics Excel exports.
-*   **AI Research Agent**: A built-in "Research Agent" sidebar that analyzes your server/disk metrics and provides insights (simulated for demo).
-*   **Report Generation**: Automatically generates a PowerPoint (`.pptx`) presentation summarizing the project, including executive summaries and hardware stats.
-*   **Modern UI**: Clean, MVVM-based WPF interface using `LiveCharts2` for high-performance rendering.
+See [`openspec/QA-REVIEW.md`](openspec/QA-REVIEW.md) and [`openspec/sprints/`](openspec/sprints/) for the live execution plan.
 
-## 📋 Prerequisites
+| Area | Actual state |
+|------|----------------|
+| Solution | `OpenReportViewer.sln` → `src/OpenReportViewer.*` |
+| Build | `dotnet build` green after Sprint 0/1 path+rename work |
+| Reports | PowerPoint (`.pptx`) only — PDF/HTML are OpenSpec roadmap items |
+| AI sidebar | **Demo/mock** insights, not a live LLM |
+| Charts | Not yet bound to parsed performance series (OpenSpec `qa-fix-dummy-charts`) |
 
-To build and run this project, you need:
+Planning docs under `docs/` describe an enterprise roadmap. Treat unchecked/false “COMPLETED” claims there as aspirational until OpenSpec changes are archived.
 
-*   **operating System**: Windows 10/11 (Required for running the WPF GUI).
-*   **.NET 8 SDK**: [Download here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0).
-*   **Node.js** (Optional, for building the installer): [Download here](https://nodejs.org/).
+## Features
 
-## 🛠️ Installation & Setup
+* **Excel ingest** — Live Optics `.xlsx` via ExcelDataReader
+* **Dashboard** — project name, server count, chart placeholders
+* **Research agent (demo)** — simulated analysis text in the sidebar
+* **PPTX export** — title, executive summary, AI-insights placeholder slides
 
-1.  **Clone the Repository**
-    ```bash
-    git clone https://github.com/TheArchitectit/radreportgenerator.git
-    cd radreportgenerator/ReportGenerator
-    ```
+## Prerequisites
 
-2.  **Open in Visual Studio**
-    *   Open `LiveOptics.sln`.
-    *   Build the Solution (`Ctrl+Shift+B`).
-    *   Run (`F5`).
+* Windows 10/11 (WPF)
+* [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) (9.x also works for building)
+* Node.js (optional, installer packaging)
 
-## 📦 Building the Application
+**Agent/CI note:** NuGet restore requires `ProgramFiles`, `ProgramFiles(x86)`, and `ProgramW6432` to be set. Use `build/verify-sprint0.cmd` (or `build/dotnet-env.cmd`).
 
- You can build the application in two ways: as a portable executable or as a full Windows Installer.
+## Build
 
-### Option 1: Portable Executable (No Install Required)
-This creates a single `.exe` file that includes all dependencies (even the .NET runtime).
-
-**Using the Batch Script:**
-Double-click `publish_portable.cmd` in the root folder. The output will be in the `PortableBuild` folder.
-
-**Using Command Line:**
-```bash
-npm run build:dotnet
+```bat
+build\verify-sprint0.cmd
 ```
 
-### Option 2: Windows Installer (Setup.exe)
-This requires `npm` to be installed. It uses Inno Setup to create a professional installer.
+Or manually:
 
-1.  **Install Dependencies**
-    ```bash
-    npm install
-    ```
+```bat
+dotnet restore src\OpenReportViewer.Core\OpenReportViewer.Core.csproj
+dotnet restore src\OpenReportViewer.Tests\OpenReportViewer.Tests.csproj
+dotnet restore src\OpenReportViewer.UI.Wpf\OpenReportViewer.UI.Wpf.csproj
+dotnet build OpenReportViewer.sln --no-restore
+dotnet test src\OpenReportViewer.Tests\OpenReportViewer.Tests.csproj --no-build
+```
 
-2.  **Build Installer**
-    ```bash
-    npm run dist
-    ```
-    *   The final installer will be located in the `Installer` folder (e.g., `Installer/LiveOpticsSetup.exe`).
+### Portable exe
 
-## 🎮 Usage Guide
+```bat
+npm run build:dotnet
+:: or
+publish_portable.cmd
+```
 
-1.  **Launch the App**: Run `LiveOptics.UI.Wpf.exe` (or use the installed shortcut).
-2.  **Load Data**: Click **Load .xlsx** and select your Live Optics export file.
-3.  **Analyze**:
-    *   Review the **Dashboard** for server counts and performance graphs.
-    *   Check the **AI Sidebar** for automatic insights on high-latency disks or legacy hardware.
-    *   Click **Run Analysis Agent** to trigger a deeper scan of the loaded metrics.
-4.  **Export**: Click **Generate Report** to save a PowerPoint summary of your findings.
+Output: `PortableBuild/OpenReportViewer.UI.Wpf.exe`
 
-## 🏗️ Project Structure
+### Windows installer
 
-*   `src/LiveOptics.Core`: Shared logic, data models, and parsers (Excel/OpenXML).
-*   `src/LiveOptics.UI.Wpf`: Main Windows application (XAML, ViewModels).
-*   `src/LiveOptics.Tests`: Unit tests for verifying logic.
+```bat
+npm install
+npm run dist
+```
 
-## 🤝 Contributing
+Output: `Installer/OpenReportViewerSetup.exe`
 
-1.  Fork the repository.
-2.  Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4.  Push to the branch (`git push origin feature/AmazingFeature`).
-5.  Open a Pull Request.
+## Usage
 
-## 📄 License
+1. Run `OpenReportViewer.UI.Wpf.exe`
+2. **Load .xlsx** — select a Live Optics export
+3. Review dashboard metrics / demo AI sidebar
+4. **Generate Report** — save a `.pptx`
 
-Distributed under the BSD-3-Clause License. See `LICENSE` for more information.
+## Project structure
 
----
+```
+src/OpenReportViewer.Core/       # Models + Live Optics parser + PPTX + mock agent
+src/OpenReportViewer.UI.Wpf/     # WPF UI (MVVM, LiveCharts2)
+src/OpenReportViewer.Tests/      # xUnit tests
+openspec/                        # Specs, change proposals, sprints, QA review
+docs/                            # Roadmap docs + sample xlsx definitions
+build/                           # Env-hardened verify scripts
+```
 
----
+## OpenSpec
 
-#
+Spec-driven work lives in `openspec/`:
 
----
+* Baseline specs: `openspec/specs/`
+* Changes (24): `openspec/changes/`
+* Sprints + full file inventory: `openspec/sprints/`
+* QA findings: `openspec/QA-REVIEW.md`
 
-## ☕ Support This Project
+Install CLI (user prefix on this machine):
 
-If this project helps you, consider [sponsoring on GitHub](https://github.com/sponsors/TheArchitectit). Every donation goes straight back into the work — GPU hardware and cloud compute for AI development, API credits for the agents that build and test these projects, and keeping everything free and open source. As a solo architect shipping on nights and weekends, even a small monthly sponsor makes a real difference.
+```bat
+npm install -g @fission-ai/openspec@latest --prefix "%USERPROFILE%\.local\openspec-cli"
+set PATH=%USERPROFILE%\.local\openspec-cli;%PATH%
+openspec list
+```
 
-Help keep this project going — use a referral link below and both of us get credits!
+Branch policy: trunk-based on `main` with short-lived feature branches (see `openspec/changes/qa-fix-git-branch-workflow/`).
 
-| Service | Your Bonus | Details | Referral Code |
-| --------- | ----------- | --------- | --------------- |
-| [**Neuralwatt**](https://portal.neuralwatt.com/auth/register?ref=NW-ROGER-ET3Y) | $10 in credits | Spend $10+ → you get $10, we get $20 | `NW-ROGER-ET3Y` |
-| [**Synthetic**](https://synthetic.new/?referral=UAWqkKQQLFkzMkY) | $10 in credits | Subscribe → both get $10 credit | `UAWqkKQQLFkzMkY` |
-| [**Ozore**](https://ozore.com/?ref=cwe4kdx0) | 50% off first month | AI-ready cloud — code **lundrog50** | `lundrog50` |
+## License
 
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-TheArchitectit-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/TheArchitectit)
+BSD-3-Clause. See `LICENSE`.

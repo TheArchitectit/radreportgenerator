@@ -1,9 +1,13 @@
 # OpenReportViewer - Sprint-by-Sprint Implementation Timeline
 
-**Document Version:** 1.0  
-**Total Duration:** 44 weeks / 11 months  
-**Sprints:** 22 sprints (2-week sprints)  
-**Team Size:** 6 FTE (2 Backend, 1 Frontend, 1 DevOps, 1 QA, 0.5 ML, 1 PM)
+> **STATUS (2026-09-18):** This timeline is a **planned** roadmap.  
+> Verified code state: [`openspec/QA-REVIEW.md`](../openspec/QA-REVIEW.md) · Execution sprints: [`openspec/sprints/`](../openspec/sprints/)  
+> Phase 0 is **partial** (rename + build). Phase 1 Sprint 3 PDF is **not implemented**.
+
+**Document Version:** 1.1 (status corrected)  
+**Total Duration (planned):** 44 weeks / 11 months  
+**Sprints (planned):** 22 sprints (2-week sprints)  
+**Team Size (planned):** 6 FTE
 
 ---
 
@@ -11,38 +15,35 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ SPRINT ROADMAP (22 Sprints)                                             │
+│ SPRINT ROADMAP (22 Sprints) — PLAN, NOT VERIFIED PROGRESS              │
 │                                                                         │
-│ Phase 0: Foundation (Sprints 1-2)     [COMPLETED]                        │
-│ Phase 1: Reporting Engine (Sprints 3-8)  [IN PROGRESS]                  │
-│ Phase 2: OpenAPI/API (Sprints 9-16)    [PLANNED]                        │
-│ Phase 3: Cloud Infra (Sprints 17-22)   [PLANNED]                        │
-│ Phase 4: AI/ML (Sprints 23-28)         [PLANNED]                        │
-│ Phase 5: Enterprise (Sprints 29-36)    [PLANNED]                        │
-│ Phase 6: Polish (Sprints 37-44)        [PLANNED]                        │
+│ Phase 0: Foundation (Sprints 1-2)     [PARTIAL — rename + build only]  │
+│ Phase 1: Reporting Engine (Sprints 3-8)  [NOT STARTED IN CODE]         │
+│ Phase 2: OpenAPI/API (Sprints 9-16)    [PLANNED]                       │
+│ Phase 3: Cloud Infra (Sprints 17-22)   [PLANNED]                       │
+│ Phase 4: AI/ML (Sprints 23-28)         [PLANNED]                       │
+│ Phase 5: Enterprise (Sprints 29-36)    [PLANNED]                       │
+│ Phase 6: Polish (Sprints 37-44)        [PLANNED]                       │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
 ## Phase 0: Foundation - Foundation & Tooling
-### Sprint 1 (Weeks 1-2) - **COMPLETED ✓**
+### Sprint 1 (Weeks 1-2) - **PARTIAL (as of 2026-09-18)**
 
 **Theme:** Project Restructure & Core Abstractions
 
-**Goals & Objectives:**
-- ✓ Rename project from LiveOptics to OpenReportViewer-Refactored
-- ✓ Create modular solution structure
-- ✓ Define core interfaces and contracts
-- ✓ Establish DI container pattern
-- ✓ Set up build pipeline
+**Verified progress:**
+- [x] Rename folders/projects toward OpenReportViewer
+- [x] Solution `OpenReportViewer.sln` builds
+- [x] Packaging paths updated
+- [ ] 7 module projects configured (still Core/Tests/UI only)
+- [ ] Core interface definitions (IDataParser, DI, etc.)
+- [ ] Centralized dependency injection
+- [ ] 78 tests / 30% coverage (actual: 55 tests)
 
-**Deliverables:**
-- [x] OpenReportViewer-Refactored.sln created
-- [x] 7 module projects configured
-- [x] Core interface definitions
-- [x] Centralized dependency injection
-- [x] Build automation scripts
+Use [`openspec/sprints/`](../openspec/sprints/) as the execution source of truth.
 
 **Detailed Tasks:**
 

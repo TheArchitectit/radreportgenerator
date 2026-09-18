@@ -3,11 +3,11 @@ using System.IO;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Presentation;
-using LiveOptics.Core.Models;
+using OpenReportViewer.Core.Models;
 using A = DocumentFormat.OpenXml.Drawing;
 using P = DocumentFormat.OpenXml.Presentation;
 
-namespace LiveOptics.Core.Services
+namespace OpenReportViewer.Core.Services
 {
     public interface IReportGenerator
     {

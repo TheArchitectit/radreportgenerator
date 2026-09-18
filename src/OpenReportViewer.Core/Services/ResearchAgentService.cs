@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace LiveOptics.Core.Services
+namespace OpenReportViewer.Core.Services
 {
     public interface IResearchAgent
     {

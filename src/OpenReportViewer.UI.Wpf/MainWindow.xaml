@@ -1,12 +1,12 @@
-<Window x:Class="LiveOptics.UI.Wpf.MainWindow"
+<Window x:Class="OpenReportViewer.UI.Wpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
-        xmlns:vm="clr-namespace:LiveOptics.UI.Wpf.ViewModels"
+        xmlns:vm="clr-namespace:OpenReportViewer.UI.Wpf.ViewModels"
         mc:Ignorable="d"
-        Title="Live Optics Report Generator" Height="720" Width="1080">
+        Title="OpenReportViewer" Height="720" Width="1080">
     
     <Window.DataContext>
         <vm:MainViewModel />
@@ -22,7 +22,7 @@
         <!-- Header -->
         <Border Grid.Row="0" Background="#0078D7" Padding="20,15">
             <DockPanel>
-                <TextBlock Text="Live Optics Analyzer" FontSize="20" Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Text="OpenReportViewer" FontSize="20" Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Content="Load .xlsx" Command="{Binding LoadFileCommand}" Padding="15,5" Margin="5,0"/>
                     <Button Content="Generate Report" Command="{Binding GenerateReportCommand}" Padding="15,5" Margin="5,0"/>

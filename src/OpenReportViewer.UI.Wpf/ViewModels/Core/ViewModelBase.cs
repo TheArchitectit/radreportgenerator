@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace LiveOptics.UI.Wpf.ViewModels
+namespace OpenReportViewer.UI.Wpf.ViewModels
 {
     public class ViewModelBase : INotifyPropertyChanged
     {

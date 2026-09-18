@@ -1,16 +1,16 @@
-@echo off
+﻿@echo off
 setlocal enabledelayedexpansion
 
 echo ================================================
-echo Live Optics Report Generator - Uninstall
+echo OpenReportViewer Report Generator - Uninstall
 echo ================================================
 echo.
 
-set "APP_NAME=Live Optics Report Generator"
-set "INSTALL_DIR=%LOCALAPPDATA%\LiveOpticsReportGenerator"
+set "APP_NAME=OpenReportViewer Report Generator"
+set "INSTALL_DIR=%LOCALAPPDATA%\OpenReportViewerReportGenerator"
 set "SHORTCUT_PATH=%USERPROFILE%\Desktop\%APP_NAME%.lnk"
 
-echo This will remove the Live Optics Report Generator.
+echo This will remove the OpenReportViewer Report Generator.
 echo.
 
 if exist "%INSTALL_DIR%" (
@@ -35,3 +35,4 @@ echo Uninstallation Complete!
 echo ================================================
 echo.
 pause
+

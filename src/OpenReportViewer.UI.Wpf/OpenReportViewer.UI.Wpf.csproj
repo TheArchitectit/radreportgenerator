@@ -7,10 +7,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <RootNamespace>OpenReportViewer.UI.Wpf</RootNamespace>
+    <AssemblyName>OpenReportViewer.UI.Wpf</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OpenReportViewer.Core\LiveOptics.Core.csproj" />
+    <ProjectReference Include="..\OpenReportViewer.Core\OpenReportViewer.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

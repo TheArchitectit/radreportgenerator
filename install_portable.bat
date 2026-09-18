@@ -1,14 +1,14 @@
-@echo off
+﻿@echo off
 setlocal enabledelayedexpansion
 
 echo ================================================
-echo Live Optics Report Generator - Portable Setup
+echo OpenReportViewer Report Generator - Portable Setup
 echo ================================================
 echo.
 
-set "APP_NAME=Live Optics Report Generator"
-set "EXE_NAME=LiveOptics.UI.Wpf.exe"
-set "INSTALL_DIR=%LOCALAPPDATA%\LiveOpticsReportGenerator"
+set "APP_NAME=OpenReportViewer Report Generator"
+set "EXE_NAME=OpenReportViewer.UI.Wpf.exe"
+set "INSTALL_DIR=%LOCALAPPDATA%\OpenReportViewerReportGenerator"
 set "SHORTCUT_PATH=%USERPROFILE%\Desktop\%APP_NAME%.lnk"
 
 echo Creating installation directory...
@@ -55,3 +55,4 @@ start "" "%INSTALL_DIR%\%EXE_NAME%"
 
 echo.
 echo Setup complete! You can close this window.
+

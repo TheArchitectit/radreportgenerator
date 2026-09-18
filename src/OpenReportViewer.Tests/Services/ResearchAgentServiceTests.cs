@@ -1,10 +1,10 @@
 using Xunit;
-using LiveOptics.Core.Services;
+using OpenReportViewer.Core.Services;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace LiveOptics.Tests.Services
+namespace OpenReportViewer.Tests.Services
 {
     public class ResearchAgentServiceTests
     {

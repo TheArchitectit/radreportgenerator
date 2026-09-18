@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveOptics.Core", "src\OpenReportViewer.Core\LiveOptics.Core.csproj", "{8F3A2C1E-4B5D-4E6F-9A1B-2C3D4E5F6A7B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenReportViewer.Core", "src\OpenReportViewer.Core\OpenReportViewer.Core.csproj", "{8F3A2C1E-4B5D-4E6F-9A1B-2C3D4E5F6A7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveOptics.UI.Wpf", "src\OpenReportViewer.UI.Wpf\LiveOptics.UI.Wpf.csproj", "{9E4B3D2F-5C6E-4F70-AB2C-3D4E5F6A7B8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenReportViewer.UI.Wpf", "src\OpenReportViewer.UI.Wpf\OpenReportViewer.UI.Wpf.csproj", "{9E4B3D2F-5C6E-4F70-AB2C-3D4E5F6A7B8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveOptics.Tests", "src\OpenReportViewer.Tests\LiveOptics.Tests.csproj", "{0F5C4E3A-6D7F-4081-BC3D-4E5F6A7B8C9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenReportViewer.Tests", "src\OpenReportViewer.Tests\OpenReportViewer.Tests.csproj", "{0F5C4E3A-6D7F-4081-BC3D-4E5F6A7B8C9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

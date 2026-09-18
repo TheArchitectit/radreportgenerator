@@ -1,11 +1,11 @@
 using Xunit;
-using LiveOptics.Core.Models;
-using LiveOptics.Core.Services;
+using OpenReportViewer.Core.Models;
+using OpenReportViewer.Core.Services;
 using System;
 using System.IO;
 using System.Linq;
 
-namespace LiveOptics.Tests.Services
+namespace OpenReportViewer.Tests.Services
 {
     public class ReportGeneratorServiceTests : IDisposable
     {

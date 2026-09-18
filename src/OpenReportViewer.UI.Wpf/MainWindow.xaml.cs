@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace LiveOptics.UI.Wpf
+namespace OpenReportViewer.UI.Wpf
 {
     public partial class MainWindow : Window
     {

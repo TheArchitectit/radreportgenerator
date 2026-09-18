@@ -5,6 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <RootNamespace>OpenReportViewer.Tests</RootNamespace>
+    <AssemblyName>OpenReportViewer.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OpenReportViewer.Core\LiveOptics.Core.csproj" />
+    <ProjectReference Include="..\OpenReportViewer.Core\OpenReportViewer.Core.csproj" />
   </ItemGroup>
 
 </Project>

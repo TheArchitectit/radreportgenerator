@@ -1,8 +1,8 @@
 using Xunit;
-using LiveOptics.Core.Models;
+using OpenReportViewer.Core.Models;
 using System;
 
-namespace LiveOptics.Tests.Models
+namespace OpenReportViewer.Tests.Models
 {
     public class ProjectInfoTests
     {

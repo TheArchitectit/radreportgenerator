@@ -1,11 +1,11 @@
-{
+﻿{
   "name": "reportgenerator",
   "version": "1.0.0",
-  "description": "",
+  "description": "OpenReportViewer - Live Optics / RVTools report generator",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:dotnet": "dotnet publish src/OpenReportViewer.UI.Wpf/LiveOptics.UI.Wpf.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o PortableBuild",
+    "build:dotnet": "dotnet publish src/OpenReportViewer.UI.Wpf/OpenReportViewer.UI.Wpf.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o PortableBuild",
     "build:installer": "node -e \"require('innosetup-compiler')('installer.iss', { gui: false, verbose: true }, (error) => { if (error) console.error(error); else console.log('Installer created successfully!'); })\"",
     "dist": "npm run build:dotnet && npm run build:installer"
   },
@@ -25,3 +25,4 @@
   },
   "homepage": "https://github.com/TheArchitectit/radreportgenerator#readme"
 }
+
