@@ -4,7 +4,11 @@ bin/
 obj/
 PortableBuild/
 Installer/
+TestResults/
+logs/
 *.user
 *.suo
 *.docstates
 node_modules/
+*.zip
+LiveOpticsReportGenerator-Portable.zip

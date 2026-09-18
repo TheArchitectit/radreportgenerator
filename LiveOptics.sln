@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveOptics.Core", "src\LiveOptics.Core\LiveOptics.Core.csproj", "{GUID_CORE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveOptics.Core", "src\OpenReportViewer.Core\LiveOptics.Core.csproj", "{8F3A2C1E-4B5D-4E6F-9A1B-2C3D4E5F6A7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveOptics.UI.Wpf", "src\LiveOptics.UI.Wpf\LiveOptics.UI.Wpf.csproj", "{GUID_WPF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveOptics.UI.Wpf", "src\OpenReportViewer.UI.Wpf\LiveOptics.UI.Wpf.csproj", "{9E4B3D2F-5C6E-4F70-AB2C-3D4E5F6A7B8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveOptics.Tests", "src\LiveOptics.Tests\LiveOptics.Tests.csproj", "{GUID_TESTS}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveOptics.Tests", "src\OpenReportViewer.Tests\LiveOptics.Tests.csproj", "{0F5C4E3A-6D7F-4081-BC3D-4E5F6A7B8C9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,18 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{GUID_CORE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{GUID_CORE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{GUID_CORE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{GUID_CORE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{GUID_WPF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{GUID_WPF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{GUID_WPF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{GUID_WPF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{GUID_TESTS}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{GUID_TESTS}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{GUID_TESTS}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{GUID_TESTS}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F3A2C1E-4B5D-4E6F-9A1B-2C3D4E5F6A7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F3A2C1E-4B5D-4E6F-9A1B-2C3D4E5F6A7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F3A2C1E-4B5D-4E6F-9A1B-2C3D4E5F6A7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F3A2C1E-4B5D-4E6F-9A1B-2C3D4E5F6A7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E4B3D2F-5C6E-4F70-AB2C-3D4E5F6A7B8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E4B3D2F-5C6E-4F70-AB2C-3D4E5F6A7B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E4B3D2F-5C6E-4F70-AB2C-3D4E5F6A7B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E4B3D2F-5C6E-4F70-AB2C-3D4E5F6A7B8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F5C4E3A-6D7F-4081-BC3D-4E5F6A7B8C9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F5C4E3A-6D7F-4081-BC3D-4E5F6A7B8C9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F5C4E3A-6D7F-4081-BC3D-4E5F6A7B8C9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F5C4E3A-6D7F-4081-BC3D-4E5F6A7B8C9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,204 @@
+================================================================================
+SPRINT 3: PDF GENERATION - DETAILED EXECUTION GUIDE
+Weeks 5-6 (10 Days) | 34 Story Points | 2 Backend Engineers
+================================================================================
+
+EXECUTE IN EXACT ORDER. DO NOT SKIP VALIDATION STEPS.
+
+================================================================================
+PRE-SPRINT VALIDATION (Before Day 1)
+================================================================================
+
+Step 1: Verify on develop branch
+cd C:\git\reportgenerator
+git status | findstr "On branch develop"
+IF %ERRORLEVEL% NEQ 0 (echo ERROR: Not on develop branch & exit /b 1)
+echo [OK] On develop branch
+
+Step 2: Verify no uncommitted changes
+git status --porcelain
+IF %ERRORLEVEL% EQU 0 (
+    for /f "tokens=*" %%i in ('git status --porcelain') do (
+        if not "%%i"=="" (echo ERROR: Uncommitted changes & exit /b 1)
+    )
+)
+echo [OK] No uncommitted changes
+
+Step 3: Run Sprint 2 tests
+dotnet test --filter "Category=Sprint2" --logger "console;verbosity=quiet"
+IF %ERRORLEVEL% NEQ 0 (echo ERROR: Sprint 2 tests failed & exit /b 1)
+echo [OK] Sprint 2 tests passed
+
+Step 4: Create license directory
+if not exist docs\licenses mkdir docs\licenses
+echo [OK] Pre-sprint validation complete
+
+================================================================================
+DAY 1: Project Setup & Base Generator (9:00 AM - 5:00 PM)
+================================================================================
+
+--- Morning: 9:00 AM - 12:00 PM ---
+
+1.1 Create Reporting Project:
+cd C:\git\reportgenerator\src
+dotnet new classlib -n OpenReportViewer.Reporting -f net8.0
+cd OpenReportViewer.Reporting
+dotnet add package QuestPDF --version 2023.12.0
+dotnet add package QuestPDF.Previewer --version 2023.12.0
+dotnet add package SkiaSharp --version 2.88.6
+dotnet add package Microsoft.Extensions.Logging.Abstractions --version 8.0.0
+dotnet add reference ..\OpenReportViewer.Core\OpenReportViewer.Core.csproj
+cd C:\git\reportgenerator
+dotnet sln add src\OpenReportViewer.Reporting\OpenReportViewer.Reporting.csproj
+dotnet build src\OpenReportViewer.Reporting\OpenReportViewer.Reporting.csproj
+IF %ERRORLEVEL% NEQ 0 (echo BUILD FAILED & exit /b 1)
+
+1.2 Create IPdfReportGenerator.cs:
+File: C:\git\reportgenerator\src\OpenReportViewer.Reporting\IPdfReportGenerator.cs
+
+<<<PASTE_CONTENT>>>
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using OpenReportViewer.Core.Interfaces;
+using OpenReportViewer.Core.Models;
+
+namespace OpenReportViewer.Reporting
+{
+    public interface IPdfReportGenerator
+    {
+        Task<Stream> GenerateAsync(IReportData data, PdfGenerationOptions options, CancellationToken cancellationToken = default);
+        ValidationResult Validate(IReportData data);
+    }
+
+    public record PdfGenerationOptions
+    {
+        public bool IncludeCoverPage { get; init; } = true;
+        public bool IncludeExecutiveSummary { get; init; } = true;
+        public bool IncludeVmInventory { get; init; } = true;
+        public bool IncludeCharts { get; init; } = true;
+        public string FontFamily { get; init; } = "Segoe UI";
+    }
+
+    public record ValidationResult
+    {
+        public bool IsValid { get; init; }
+        public System.Collections.Generic.List<string> Errors { get; init; } = new();
+        public System.Collections.Generic.List<string> Warnings { get; init; } = new();
+    }
+}
+<<<END_PASTE>>>
+
+1.3 Create QuestPdfReportGenerator.cs:
+File: C:\git\reportgenerator\src\OpenReportViewer.Reporting\QuestPdfReportGenerator.cs
+
+<<<PASTE_CONTENT>>>
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+using Microsoft.Extensions.Logging;
+using OpenReportViewer.Core.Interfaces;
+using OpenReportViewer.Core.Models;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace OpenReportViewer.Reporting
+{
+    public class QuestPdfReportGenerator : IPdfReportGenerator
+    {
+        private readonly ILogger<QuestPdfReportGenerator> _logger;
+        private readonly IChartProvider _chartProvider;
+        
+        public QuestPdfReportGenerator(ILogger<QuestPdfReportGenerator> logger, IChartProvider chartProvider)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _chartProvider = chartProvider ?? throw new ArgumentNullException(nameof(chartProvider));
+            QuestPDF.Settings.License = LicenseType.Community;
+        }
+        
+        public async Task<Stream> GenerateAsync(IReportData data, PdfGenerationOptions options, CancellationToken cancellationToken = default)
+        {
+            _logger.LogInformation("Starting PDF generation for {VmCount} VMs", data.VirtualMachines.Count);
+            var validation = Validate(data);
+            if (!validation.IsValid)
+            {
+                throw new InvalidOperationException($"Validation failed: {string.Join(", ", validation.Errors)}");
+            }
+            var document = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(2, Unit.Centimetre);
+                    page.DefaultTextStyle(x => x.FontFamily(options.FontFamily).FontSize(11));
+                    page.Header().Element(ComposeHeader);
+                    page.Content().Element(content => ComposeContent(content, data, options));
+                    page.Footer().Element(ComposeFooter);
+                });
+            });
+            var stream = new MemoryStream();
+            document.GeneratePdf(stream);
+            stream.Position = 0;
+            _logger.LogInformation("PDF complete: {Pages} pages, {KB:F1} KB", document.PageCount, stream.Length / 1024.0);
+            return stream;
+        }
+        
+        public ValidationResult Validate(IReportData data)
+        {
+            var result = new ValidationResult();
+            if (data == null) result.Errors.Add("Data cannot be null");
+            if (data?.VirtualMachines == null) result.Warnings.Add("No VMs in dataset");
+            result.IsValid = !result.Errors.Any();
+            return result;
+        }
+        
+        private void ComposeHeader(IContainer container)
+        {
+            container.Row(row =>
+            {
+                row.RelativeItem().Text("OpenReportViewer").Bold().FontSize(14);
+                row.ConstantItem(100).AlignRight().Text(DateTime.Now.ToString("MMM dd, yyyy"));
+            });
+        }
+        
+        private void ComposeContent(IContainer container, IReportData data, PdfGenerationOptions options)
+        {
+            container.Column(column =>
+            {
+                column.Item().Element(ComposeCoverPage);
+                column.Item().PageBreak();
+                column.Item().Element(ComposeExecutiveSummary);
+            });
+        }
+        
+        private void ComposeCoverPage(IContainer container)
+        {
+            container.PaddingTop(8, Unit.Centimetre).AlignCenter().Column(column =>
+            {
+                column.Item().Text("Infrastructure Assessment Report").FontSize(24).Bold().FontColor(Colors.Blue.Darken2);
+                column.Item().PaddingTop(2, Unit.Centimetre).Text($"Generated: {DateTime.Now:MMMM dd, yyyy}");
+                column.Item().Text($"VMs Analyzed: {data.VirtualMachines.Count:N0}");
+            });
+        }
+        
+        private void ComposeExecutiveSummary(IContainer container)
+        {
+            container.Column(column =>
+            {
+                column.Item().Text("Executive Summary").FontSize(16).Bold();
+                column.Item().PaddingTop(10).Text("This report provides infrastructure analysis based on provided data export.");
+            });
+        }
+        
+        private void ComposeFooter(IContainer container)
+        {
+            container.AlignCenter().Text(x =>
+            {
+                x.Span("Page ");
+                x.CurrentPageNumber();\n                x.Span(" of ");
+                x.TotalPages();
+            });
+        }
+    }
+  

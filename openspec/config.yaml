@@ -1,0 +1,27 @@
+schema: spec-driven
+
+context: |
+  Project: reportgenerator (Live Optics Report Generator → OpenReportViewer)
+  Stack: .NET 8 WPF (LiveCharts2), ExcelDataReader, DocumentFormat.OpenXml, xUnit
+  Status: Brownfield. Folders renamed to OpenReportViewer.* but solution/csproj/namespaces still LiveOptics.*
+  Build: BROKEN until Sprint 0 — LiveOptics.sln points at deleted src/LiveOptics.* paths
+  Docs: docs/ claimed Sprint 3 PDF complete; that code does not exist in src/
+  Domain: Ingest Dell Live Optics / RVTools VMware assessment xlsx → visualize + generate reports
+  Conventions: proposal.md + specs/<domain>/spec.md + design.md + tasks.md per change
+  File inventory: openspec/sprints/FILE-INVENTORY.md
+  QA findings: openspec/QA-REVIEW.md
+  Sprints: openspec/sprints/ (Sprint 0–5)
+
+rules:
+  proposal:
+    - State Intent, Scope (in/out), Approach
+    - For QA fixes, describe correct behavior not just "fix bug"
+    - Reference concrete file paths
+  specs:
+    - Behavior-first requirements with SHALL/MUST
+    - Scenarios in GIVEN/WHEN/THEN
+    - No class names in requirement body unless contract-level
+  tasks:
+    - Hierarchical numbering (1.1, 1.2)
+    - Every task names the files it touches
+    - Include verification (build/test) tasks
