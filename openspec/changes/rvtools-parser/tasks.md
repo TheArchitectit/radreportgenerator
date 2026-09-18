@@ -6,4 +6,4 @@
 - [ ] 1.4 Parse vPartition
 - [ ] 1.5 Parse vHost
 - [ ] 1.6 Merge into IReportData
-- [ ] 1.7 Tests + fixture skip-if-missing
+- [x] 1.7 Tests + fixture skip-if-missing

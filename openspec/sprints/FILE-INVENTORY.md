@@ -54,3 +54,26 @@ Excludes `.git/`, `bin/`, `obj/`, `node_modules/`, `TestResults/`, generated Ope
 
 - **45 tracked project files** (excluding bin/obj/git/TestResults/tool dirs) — all mapped above.
 - Newly added OpenSpec artifacts live under `openspec/`, `.agents/`, `.claude/`, `.mimocode/` and are maintained by the OpenSpec workflow, not product sprints.
+
+
+## Post-Sprint-5 additions (OpenSpec apply 2026-09-18)
+
+| File | Sprint(s) | OpenSpec change(s) |
+|------|-----------|-------------------|
+| `src/OpenReportViewer.Parsers/RVToolsParser.cs` | 4 | `rvtools-parser` |
+| `src/OpenReportViewer.Parsers/LiveOpticsPerformanceParser.cs` | 4 | `liveoptics-performance-data`, `qa-fix-dummy-charts` |
+| `src/OpenReportViewer.Core/Charts/ChartProviders.cs` | 5 | `chart-provider-system` |
+| `src/OpenReportViewer.Core/Models/ChartDataBuilder.cs` | 4 | `chart-provider-system`, `qa-fix-dummy-charts` |
+| `src/OpenReportViewer.Core/Diagnostics/AppLog.cs` | 5 | `debug-infrastructure` |
+| `src/OpenReportViewer.Reporting/QuestPdfReportGenerator.cs` | 3 | `pdf-generation-questpdf` |
+| `src/OpenReportViewer.Reporting/HtmlReportGenerator.cs` | 5 | `multi-format-reports` |
+| `src/OpenReportViewer.Tests/Parsers/RVToolsParserTests.cs` | 4 | `rvtools-parser` |
+| `src/OpenReportViewer.Tests/Parsers/LiveOpticsPerformanceParserTests.cs` | 4 | `liveoptics-performance-data` |
+| `src/OpenReportViewer.Tests/Charts/ChartProviderTests.cs` | 5 | `chart-provider-system` |
+| `src/OpenReportViewer.Tests/Reporting/QuestPdfReportGeneratorTests.cs` | 3 | `pdf-generation-questpdf` |
+| `src/OpenReportViewer.Tests/Reporting/HtmlReportGeneratorTests.cs` | 5 | `multi-format-reports` |
+| `src/OpenReportViewer.AI/ResearchAgentService.cs` | 2 | `modular-architecture`, `qa-fix-real-ai-analysis` |
+| `src/OpenReportViewer.Core/Interfaces/*.cs` | 2 | `core-interfaces-and-di` |
+| `build/verify-sprint0.cmd` | 0 | `fix-solution-paths` |
+| `docs/BRANCH-POLICY.md` | 1 | `qa-fix-git-branch-workflow` |
+| `OpenReportViewer.sln` | 0-2 | `fix-solution-paths`, `rename-to-openreportviewer`, `modular-architecture` |

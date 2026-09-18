@@ -14,4 +14,4 @@
 ## 3. Verify
 - [x] 3.1 Build solution
 - [x] 3.2 All tests pass
-- [ ] 3.3 Update FILE-INVENTORY sprint mapping
+- [x] 3.3 Update FILE-INVENTORY sprint mapping

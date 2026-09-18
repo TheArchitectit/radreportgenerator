@@ -101,9 +101,7 @@ namespace OpenReportViewer.Parsers
 
         private void ParsePerformanceData(DataSet data, ProjectInfo project)
         {
-            // Performance series not implemented yet (see openspec/changes/liveoptics-performance-data).
-            // Keep history empty so the UI can show an empty state instead of fabricated metrics.
-            Console.WriteLine("LiveOpticsXlsxParser: performance series parse not implemented; history left empty.");
+            LiveOpticsPerformanceParser.Parse(data, project);
         }
     }
 }

@@ -9,6 +9,7 @@ using OpenReportViewer.Parsers;
 using OpenReportViewer.AI;
 using OpenReportViewer.Reporting;
 using OpenReportViewer.Core.Diagnostics;
+using OpenReportViewer.Core.Charts;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
@@ -26,6 +27,7 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
         private readonly IPdfReportGenerator? _pdfGenerator;
         private readonly ReportFormatFactory? _formatFactory;
         private readonly IAppLog? _log;
+        private readonly ChartProviderFactory _chartFactory = new();
 
         private ProjectInfo? _currentProject;
         private string _statusMessage = "Ready";
@@ -274,10 +276,11 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
             ChartTopTitle = topCpu.Title;
             ChartBottomTitle = topPart.Kind != ChartKind.Empty ? topPart.Title : topMem.Title;
 
-            IOPSSeries = ToColumnSeries(topCpu, SKColors.RoyalBlue);
-            ThroughputSeries = ToColumnSeries(
-                topPart.Kind != ChartKind.Empty ? topPart : topMem,
-                SKColors.Teal);
+            var cpuRender = _chartFactory.Render(topCpu);
+            var bottomSeries = topPart.Kind != ChartKind.Empty ? topPart : topMem;
+            var bottomRender = _chartFactory.Render(bottomSeries);
+            IOPSSeries = ToColumnSeries(topCpu, cpuRender, SKColors.RoyalBlue);
+            ThroughputSeries = ToColumnSeries(bottomSeries, bottomRender, SKColors.Teal);
 
             ChartEmptyMessage =
                 (topCpu.Kind == ChartKind.Empty && topPart.Kind == ChartKind.Empty && topMem.Kind == ChartKind.Empty)
@@ -293,13 +296,13 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
             OnPropertyChanged(nameof(ChartBottomTitle));
         }
 
-        private static ISeries[] ToColumnSeries(ChartSeries series, SKColor color)
+        private static ISeries[] ToColumnSeries(ChartSeries series, Core.Charts.RenderableChart render, SKColor color)
         {
-            if (series.Kind == ChartKind.Empty || series.Points.Count == 0)
+            if (render.Kind == Core.Charts.ChartProviderKind.Empty || render.Values.Count == 0)
                 return Array.Empty<ISeries>();
 
-            var labels = series.Points.Select(p => p.Label).ToArray();
-            var values = series.Points.Select(p => p.Value).ToArray();
+            var labels = render.Labels;
+            var values = render.Values;
 
             return new ISeries[]
             {
