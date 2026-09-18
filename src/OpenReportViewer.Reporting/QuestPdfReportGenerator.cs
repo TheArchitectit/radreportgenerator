@@ -57,6 +57,11 @@ namespace OpenReportViewer.Reporting
                         {
                             column.Item().Element(c => ComposeServers(c, project));
                         }
+                        if (project.VirtualMachines.Count > 0)
+                        {
+                            column.Item().PageBreak();
+                            column.Item().Element(c => ComposeTopVms(c, project));
+                        }
                     });
                     page.Footer().AlignCenter().Text(text =>
                     {
@@ -93,34 +98,71 @@ namespace OpenReportViewer.Reporting
 
         private static void ComposeCover(IContainer container, ProjectInfo project)
         {
-            var cpu = project.Servers?.Sum(s => s.CPUCount) ?? 0;
-            var mem = project.Servers?.Sum(s => s.MemoryGB) ?? 0;
+            var cpu = ProjectAggregates.TotalCpuCores(project);
+            var memMb = ProjectAggregates.TotalMemoryMb(project);
             container.PaddingTop(6, Unit.Centimetre).AlignCenter().Column(column =>
             {
                 column.Item().Text("Infrastructure Assessment Report").FontSize(24).Bold().FontColor(Colors.Blue.Darken2);
                 column.Item().PaddingTop(1, Unit.Centimetre).Text($"Project: {project.ProjectName}").FontSize(16);
-                column.Item().PaddingTop(0.5f, Unit.Centimetre).Text($"Generated: {DateTime.Now:MMMM dd, yyyy}");
-                column.Item().PaddingTop(0.5f, Unit.Centimetre).Text($"Servers: {project.Servers?.Count ?? 0}");
+                column.Item().PaddingTop(0.25f, Unit.Centimetre).Text($"Source: {project.SourceType}");
+                column.Item().PaddingTop(0.25f, Unit.Centimetre).Text($"Generated: {DateTime.Now:MMMM dd, yyyy}");
+                column.Item().PaddingTop(0.5f, Unit.Centimetre).Text($"VMs: {ProjectAggregates.TotalVmCount(project)}");
+                column.Item().Text($"Hosts/Servers: {ProjectAggregates.TotalHostCount(project) + (project.VirtualMachines.Count == 0 ? (project.Servers?.Count ?? 0) : 0)}");
                 column.Item().Text($"Total CPU cores: {cpu:N0}");
-                column.Item().Text($"Total memory: {mem:N1} GB");
+                column.Item().Text($"Total memory: {memMb / 1024.0:N1} GB");
             });
         }
 
         private static void ComposeSummary(IContainer container, ProjectInfo project)
         {
-            var cpu = project.Servers?.Sum(s => s.CPUCount) ?? 0;
-            var mem = project.Servers?.Sum(s => s.MemoryGB) ?? 0;
+            var cpu = ProjectAggregates.TotalCpuCores(project);
+            var memGb = ProjectAggregates.TotalMemoryMb(project) / 1024.0;
             container.Column(column =>
             {
                 column.Item().Text("Executive Summary").FontSize(16).Bold();
                 column.Item().PaddingTop(10).Text(
-                    $"This report summarizes Live Optics assessment data for project '{project.ProjectName}'.");
-                column.Item().PaddingTop(8).Text($"Analyzed {project.Servers?.Count ?? 0} servers.");
-                column.Item().Text($"Total CPU cores: {cpu:N0}");
-                column.Item().Text($"Total memory: {mem:N1} GB");
+                    $"This report summarizes {project.SourceType} assessment data for project '{project.ProjectName}'.");
                 column.Item().PaddingTop(8).Text(
-                    "Note: Performance time-series and AI insights are not included in this MVP PDF.")
+                    $"Analyzed {ProjectAggregates.TotalVmCount(project)} VMs and {ProjectAggregates.TotalHostCount(project)} hosts ({project.Servers?.Count ?? 0} inventory rows).");
+                column.Item().Text($"Total CPU cores: {cpu:N0}");
+                column.Item().Text($"Total memory: {memGb:N1} GB");
+                column.Item().Text($"Provisioned storage: {ProjectAggregates.TotalProvisionedMb(project) / 1024.0:N1} GB");
+                column.Item().Text($"In-use storage: {ProjectAggregates.TotalInUseMb(project) / 1024.0:N1} GB");
+                column.Item().PaddingTop(8).Text(
+                    "Note: Live performance time-series and live AI insights are not included in this MVP PDF.")
                     .FontSize(10).FontColor(Colors.Grey.Darken1);
+            });
+        }
+
+        private static void ComposeTopVms(IContainer container, ProjectInfo project)
+        {
+            var top = ProjectAggregates.TopVmCpu(project, 15);
+            container.Column(column =>
+            {
+                column.Item().Text("Top VMs by CPU").FontSize(16).Bold();
+                column.Item().PaddingTop(10).Table(table =>
+                {
+                    table.ColumnsDefinition(c =>
+                    {
+                        c.RelativeColumn(4);
+                        c.RelativeColumn(2);
+                    });
+                    table.Header(h =>
+                    {
+                        h.Cell().Background(Colors.Grey.Lighten3).Padding(4).Text("VM").Bold();
+                        h.Cell().Background(Colors.Grey.Lighten3).Padding(4).AlignRight().Text("vCPU").Bold();
+                    });
+                    if (top.Count == 0)
+                    {
+                        table.Cell().ColumnSpan(2).Padding(8).Text("No VM data.");
+                        return;
+                    }
+                    foreach (var (label, value) in top)
+                    {
+                        table.Cell().BorderBottom(0.5f).BorderColor(Colors.Grey.Lighten2).Padding(4).Text(label);
+                        table.Cell().BorderBottom(0.5f).BorderColor(Colors.Grey.Lighten2).Padding(4).AlignRight().Text(value.ToString("0"));
+                    }
+                });
             });
         }
 

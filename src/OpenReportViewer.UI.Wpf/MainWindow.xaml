@@ -52,13 +52,26 @@
                             <TextBlock Text="{Binding ProjectName}" FontSize="16" FontWeight="SemiBold"/>
                         </StackPanel>
                     </Border>
-                    <Border Background="White" CornerRadius="5" Padding="15" Margin="0,0,10,0" MinWidth="150">
+                    <Border Background="White" CornerRadius="5" Padding="15" Margin="0,0,10,0" MinWidth="120">
                         <StackPanel>
-                            <TextBlock Text="Servers" Foreground="Gray"/>
+                            <TextBlock Text="Hosts/Servers" Foreground="Gray"/>
                             <TextBlock Text="{Binding ServerCount}" FontSize="16" FontWeight="SemiBold"/>
                         </StackPanel>
                     </Border>
+                    <Border Background="White" CornerRadius="5" Padding="15" Margin="0,0,10,0" MinWidth="100">
+                        <StackPanel>
+                            <TextBlock Text="VMs" Foreground="Gray"/>
+                            <TextBlock Text="{Binding VmCount}" FontSize="16" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="White" CornerRadius="5" Padding="15" Margin="0,0,10,0" MinWidth="100">
+                        <StackPanel>
+                            <TextBlock Text="Source" Foreground="Gray"/>
+                            <TextBlock Text="{Binding SourceType}" FontSize="16" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
+                <TextBlock Grid.Row="0" Text="{Binding ChartEmptyMessage}" Foreground="Gray" Margin="0,4,0,0" VerticalAlignment="Bottom"/>
 
                 <!-- Charts -->
                 <Grid Grid.Row="1">
@@ -69,14 +82,14 @@
                     
                     <Border Grid.Row="0" Background="White" CornerRadius="5" Margin="0,0,0,10" Padding="10">
                         <DockPanel>
-                            <TextBlock Text="IOPS Performance" DockPanel.Dock="Top" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBlock Text="{Binding ChartTopTitle}" DockPanel.Dock="Top" FontWeight="Bold" Margin="0,0,0,5"/>
                             <lvc:CartesianChart Series="{Binding IOPSSeries}" />
                         </DockPanel>
                     </Border>
 
                     <Border Grid.Row="1" Background="White" CornerRadius="5" Margin="0,10,0,0" Padding="10">
                         <DockPanel>
-                            <TextBlock Text="Throughput (MB/s)" DockPanel.Dock="Top" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBlock Text="{Binding ChartBottomTitle}" DockPanel.Dock="Top" FontWeight="Bold" Margin="0,0,0,5"/>
                             <lvc:CartesianChart Series="{Binding ThroughputSeries}" />
                         </DockPanel>
                     </Border>

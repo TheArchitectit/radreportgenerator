@@ -120,6 +120,9 @@ namespace OpenReportViewer.Parsers
             services.AddSingleton<LiveOpticsXlsxParser>();
             services.AddSingleton<ILiveOpticsParser>(sp => sp.GetRequiredService<LiveOpticsXlsxParser>());
             services.AddSingleton<IDataParser>(sp => sp.GetRequiredService<LiveOpticsXlsxParser>());
+            services.AddSingleton<RVToolsParser>();
+            services.AddSingleton<IDataParser>(sp => sp.GetRequiredService<RVToolsParser>());
+            services.AddSingleton<ParserFactory>();
             return services;
         }
     }

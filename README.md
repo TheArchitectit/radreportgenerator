@@ -79,7 +79,10 @@ Output: `Installer/OpenReportViewerSetup.exe`
 ## Project structure
 
 ```
-src/OpenReportViewer.Core/       # Models + Live Optics parser + PPTX + mock agent
+src/OpenReportViewer.Core/       # Models, aggregates, chart builder, interfaces
+src/OpenReportViewer.Parsers/    # Live Optics + RVTools parsers, ParserFactory
+src/OpenReportViewer.Reporting/  # PPTX + QuestPDF PDF
+src/OpenReportViewer.AI/         # Demo research agent
 src/OpenReportViewer.UI.Wpf/     # WPF UI (MVVM, LiveCharts2)
 src/OpenReportViewer.Tests/      # xUnit tests
 openspec/                        # Specs, change proposals, sprints, QA review

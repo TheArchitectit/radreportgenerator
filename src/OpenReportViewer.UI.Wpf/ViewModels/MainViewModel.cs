@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.IO;
 using System.Windows;
 using Microsoft.Win32;
@@ -9,6 +10,8 @@ using OpenReportViewer.AI;
 using OpenReportViewer.Reporting;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
+using SkiaSharp;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -16,7 +19,7 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly LiveOpticsXlsxParser _parser;
+        private readonly ParserFactory _parserFactory;
         private readonly IAnalysisService _researchAgent;
         private readonly IPptxReportGenerator _reportGenerator;
         private readonly IPdfReportGenerator? _pdfGenerator;
@@ -26,17 +29,21 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
         private bool _isBusy;
 
         public MainViewModel()
-            : this(new LiveOpticsXlsxParser(), new ResearchAgentService(), new ReportGeneratorService(), new QuestPdfReportGenerator())
+            : this(
+                new ParserFactory(new IDataParser[] { new RVToolsParser(), new LiveOpticsXlsxParser() }),
+                new ResearchAgentService(),
+                new ReportGeneratorService(),
+                new QuestPdfReportGenerator())
         {
         }
 
         public MainViewModel(
-            LiveOpticsXlsxParser parser,
+            ParserFactory parserFactory,
             IAnalysisService researchAgent,
             IPptxReportGenerator reportGenerator,
             IPdfReportGenerator? pdfGenerator = null)
         {
-            _parser = parser;
+            _parserFactory = parserFactory;
             _researchAgent = researchAgent;
             _reportGenerator = reportGenerator;
             _pdfGenerator = pdfGenerator;
@@ -73,6 +80,9 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
                 {
                     OnPropertyChanged(nameof(ProjectName));
                     OnPropertyChanged(nameof(ServerCount));
+                    OnPropertyChanged(nameof(VmCount));
+                    OnPropertyChanged(nameof(HostCount));
+                    OnPropertyChanged(nameof(SourceType));
                     UpdateCharts();
                 }
             }
@@ -80,10 +90,15 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
 
         public string ProjectName => _currentProject?.ProjectName ?? "No Project Loaded";
         public int ServerCount => _currentProject?.Servers?.Count ?? 0;
+        public int VmCount => _currentProject == null ? 0 : ProjectAggregates.TotalVmCount(_currentProject);
+        public int HostCount => _currentProject == null ? 0 : ProjectAggregates.TotalHostCount(_currentProject);
+        public string SourceType => _currentProject?.SourceType ?? "—";
 
         public ISeries[] IOPSSeries { get; set; } = Array.Empty<ISeries>();
         public ISeries[] ThroughputSeries { get; set; } = Array.Empty<ISeries>();
-        public string ChartEmptyMessage { get; set; } = "Load a Live Optics export with performance series to plot charts.";
+        public string ChartEmptyMessage { get; set; } = "Load an RVTools or Live Optics .xlsx export.";
+        public string ChartTopTitle { get; set; } = "Top metrics";
+        public string ChartBottomTitle { get; set; } = "Storage / performance";
 
         public ObservableCollection<string> AiInsights { get; } = new();
 
@@ -95,7 +110,7 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
         {
             var dialog = new OpenFileDialog
             {
-                Filter = "Live Optics Excel|*.xlsx|All Files|*.*"
+                Filter = "Excel exports|*.xlsx;*.xls|All Files|*.*"
             };
 
             if (dialog.ShowDialog() == true)
@@ -105,9 +120,9 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
                     IsBusy = true;
                     StatusMessage = "Parsing file...";
 
-                    var project = await Task.Run(() => _parser.ParseFile(dialog.FileName));
+                    var project = await Task.Run(() => _parserFactory.Parse(dialog.FileName));
                     CurrentProject = project;
-                    StatusMessage = "Loaded " + (project?.ProjectName ?? "Unknown");
+                    StatusMessage = $"Loaded {project?.ProjectName ?? "Unknown"} ({project?.SourceType ?? "?"})";
                 }
                 catch (Exception ex)
                 {
@@ -184,18 +199,26 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
                     AiInsights.Add("[DEMO] Insights below are simulated and not produced by a live LLM.");
                 }
 
-                var analysis = await _researchAgent.AnalyzePerformanceAsync("High Latency detected on Disk 0");
+                var analysis = await _researchAgent.AnalyzePerformanceAsync(
+                    $"Source={_currentProject.SourceType}, VMs={VmCount}, Hosts={HostCount}");
                 AiInsights.Add(analysis);
 
-                if (_currentProject.Servers != null)
+                var hosts = _currentProject.Hosts;
+                if (hosts is { Count: > 0 })
                 {
-                    foreach (var server in _currentProject.Servers)
+                    foreach (var host in hosts.Where(h => h.TotalCores >= 32 || h.VmCount >= 20).Take(5))
                     {
-                        if (server.CPUCount > 32)
-                        {
-                            var hardwareResearch = await _researchAgent.ResearchHardwareAsync("High Core Count Server");
-                            AiInsights.Add($"Server {server.ServerName}: {hardwareResearch}");
-                        }
+                        var hardwareResearch = await _researchAgent.ResearchHardwareAsync(
+                            string.IsNullOrWhiteSpace(host.CpuModel) ? "High density host" : host.CpuModel);
+                        AiInsights.Add($"Host {host.HostName} ({host.VmCount} VMs, {host.TotalCores} cores): {hardwareResearch}");
+                    }
+                }
+                else if (_currentProject.Servers != null)
+                {
+                    foreach (var server in _currentProject.Servers.Where(s => s.CPUCount > 32).Take(5))
+                    {
+                        var hardwareResearch = await _researchAgent.ResearchHardwareAsync("High Core Count Server");
+                        AiInsights.Add($"Server {server.ServerName}: {hardwareResearch}");
                     }
                 }
 
@@ -214,14 +237,63 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
 
         private void UpdateCharts()
         {
-            // Do not fabricate series. Real performance parsing is tracked in
-            // openspec/changes/liveoptics-performance-data and qa-fix-dummy-charts.
-            IOPSSeries = Array.Empty<ISeries>();
-            ThroughputSeries = Array.Empty<ISeries>();
-            ChartEmptyMessage = "No performance series in this export yet (parser stub).";
+            var p = _currentProject;
+            if (p == null)
+            {
+                IOPSSeries = Array.Empty<ISeries>();
+                ThroughputSeries = Array.Empty<ISeries>();
+                ChartEmptyMessage = "Load an RVTools or Live Optics .xlsx export.";
+                OnPropertyChanged(nameof(IOPSSeries));
+                OnPropertyChanged(nameof(ThroughputSeries));
+                OnPropertyChanged(nameof(ChartEmptyMessage));
+                return;
+            }
+
+            var topCpu = ChartDataBuilder.VmCpuTop(p);
+            var topMem = ChartDataBuilder.VmMemoryTop(p);
+            var topPart = ChartDataBuilder.PartitionCapacityTop(p);
+
+            ChartTopTitle = topCpu.Title;
+            ChartBottomTitle = topPart.Kind != ChartKind.Empty ? topPart.Title : topMem.Title;
+
+            IOPSSeries = ToColumnSeries(topCpu, SKColors.RoyalBlue);
+            ThroughputSeries = ToColumnSeries(
+                topPart.Kind != ChartKind.Empty ? topPart : topMem,
+                SKColors.Teal);
+
+            ChartEmptyMessage =
+                (topCpu.Kind == ChartKind.Empty && topPart.Kind == ChartKind.Empty && topMem.Kind == ChartKind.Empty)
+                    ? (p.SourceType == "RVTools"
+                        ? "RVTools file parsed but no VM/host metrics found."
+                        : "No performance series in this Live Optics export yet.")
+                    : $"Source: {p.SourceType} · VMs: {VmCount} · Hosts: {HostCount}";
+
             OnPropertyChanged(nameof(IOPSSeries));
             OnPropertyChanged(nameof(ThroughputSeries));
             OnPropertyChanged(nameof(ChartEmptyMessage));
+            OnPropertyChanged(nameof(ChartTopTitle));
+            OnPropertyChanged(nameof(ChartBottomTitle));
+        }
+
+        private static ISeries[] ToColumnSeries(ChartSeries series, SKColor color)
+        {
+            if (series.Kind == ChartKind.Empty || series.Points.Count == 0)
+                return Array.Empty<ISeries>();
+
+            var labels = series.Points.Select(p => p.Label).ToArray();
+            var values = series.Points.Select(p => p.Value).ToArray();
+
+            return new ISeries[]
+            {
+                new ColumnSeries<double>
+                {
+                    Name = series.Title,
+                    Values = values,
+                    Fill = new SolidColorPaint(color),
+                    DataLabelsPaint = new SolidColorPaint(SKColors.Black),
+                    DataLabelsFormatter = point => point.Model.ToString("0.#")
+                }
+            };
         }
     }
 }
