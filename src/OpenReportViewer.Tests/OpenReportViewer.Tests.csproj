@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -22,4 +22,11 @@
     <ProjectReference Include="..\OpenReportViewer.Core\OpenReportViewer.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OpenReportViewer.Parsers\OpenReportViewer.Parsers.csproj" />
+    <ProjectReference Include="..\OpenReportViewer.Reporting\OpenReportViewer.Reporting.csproj" />
+    <ProjectReference Include="..\OpenReportViewer.AI\OpenReportViewer.AI.csproj" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
 </Project>
+

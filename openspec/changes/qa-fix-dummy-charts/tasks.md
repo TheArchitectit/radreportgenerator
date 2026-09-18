@@ -7,6 +7,6 @@
 
 ## UI
 - [ ] 2.1 UpdateCharts reads CurrentProject performance aggregates
-- [ ] 2.2 Empty-state when no series
-- [ ] 2.3 Remove hardcoded production dummy arrays
+- [x] 2.2 Empty-state when no series
+- [x] 2.3 Remove hardcoded production dummy arrays
 - [ ] 2.4 Manual verify with docs sample xlsx if structure matches

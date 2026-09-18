@@ -5,6 +5,12 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenReportViewer.Core", "src\OpenReportViewer.Core\OpenReportViewer.Core.csproj", "{8F3A2C1E-4B5D-4E6F-9A1B-2C3D4E5F6A7B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenReportViewer.Parsers", "src\OpenReportViewer.Parsers\OpenReportViewer.Parsers.csproj", "{A1B2C3D4-E5F6-4789-ABCD-111111111111}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenReportViewer.Reporting", "src\OpenReportViewer.Reporting\OpenReportViewer.Reporting.csproj", "{A1B2C3D4-E5F6-4789-ABCD-222222222222}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenReportViewer.AI", "src\OpenReportViewer.AI\OpenReportViewer.AI.csproj", "{A1B2C3D4-E5F6-4789-ABCD-333333333333}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenReportViewer.UI.Wpf", "src\OpenReportViewer.UI.Wpf\OpenReportViewer.UI.Wpf.csproj", "{9E4B3D2F-5C6E-4F70-AB2C-3D4E5F6A7B8C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenReportViewer.Tests", "src\OpenReportViewer.Tests\OpenReportViewer.Tests.csproj", "{0F5C4E3A-6D7F-4081-BC3D-4E5F6A7B8C9D}"
@@ -19,6 +25,18 @@ Global
 		{8F3A2C1E-4B5D-4E6F-9A1B-2C3D4E5F6A7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F3A2C1E-4B5D-4E6F-9A1B-2C3D4E5F6A7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F3A2C1E-4B5D-4E6F-9A1B-2C3D4E5F6A7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-111111111111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-111111111111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-111111111111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-111111111111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-222222222222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-222222222222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-222222222222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-222222222222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-333333333333}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-333333333333}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-333333333333}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B2C3D4-E5F6-4789-ABCD-333333333333}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9E4B3D2F-5C6E-4F70-AB2C-3D4E5F6A7B8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9E4B3D2F-5C6E-4F70-AB2C-3D4E5F6A7B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E4B3D2F-5C6E-4F70-AB2C-3D4E5F6A7B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,5 +1,8 @@
 using Xunit;
-using OpenReportViewer.Core.Services;
+using OpenReportViewer.Parsers;
+using OpenReportViewer.Reporting;
+using OpenReportViewer.AI;
+using OpenReportViewer.Core.Interfaces;
 using System;
 using System.IO;
 using System.Threading.Tasks;

@@ -1,6 +1,9 @@
 using Xunit;
 using OpenReportViewer.Core.Models;
-using OpenReportViewer.Core.Services;
+using OpenReportViewer.Parsers;
+using OpenReportViewer.Reporting;
+using OpenReportViewer.AI;
+using OpenReportViewer.Core.Interfaces;
 using System.Collections.Generic;
 
 namespace OpenReportViewer.Tests

@@ -2,7 +2,10 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using Microsoft.Win32;
 using OpenReportViewer.Core.Models;
-using OpenReportViewer.Core.Services;
+using OpenReportViewer.Core.Interfaces;
+using OpenReportViewer.Parsers;
+using OpenReportViewer.AI;
+using OpenReportViewer.Reporting;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using System.Threading.Tasks;
@@ -13,25 +16,32 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly LiveOpticsXlsxParser _parser;
-        private readonly IResearchAgent _researchAgent;
-        private readonly IReportGenerator _reportGenerator;
-        
+        private readonly IAnalysisService _researchAgent;
+        private readonly IPptxReportGenerator _reportGenerator;
+
         private ProjectInfo? _currentProject;
         private string _statusMessage = "Ready";
         private bool _isBusy;
 
         public MainViewModel()
+            : this(new LiveOpticsXlsxParser(), new ResearchAgentService(), new ReportGeneratorService())
         {
-            _parser = new LiveOpticsXlsxParser();
-            _researchAgent = new ResearchAgentService(); // DI would be better here
-            _reportGenerator = new ReportGeneratorService();
+        }
+
+        public MainViewModel(
+            LiveOpticsXlsxParser parser,
+            IAnalysisService researchAgent,
+            IPptxReportGenerator reportGenerator)
+        {
+            _parser = parser;
+            _researchAgent = researchAgent;
+            _reportGenerator = reportGenerator;
 
             LoadFileCommand = new RelayCommand(LoadFile);
             GenerateReportCommand = new RelayCommand(GenerateReport, _ => _currentProject != null);
             AnalyzeWithAiCommand = new RelayCommand(async _ => await AnalyzeAsync(), _ => _currentProject != null);
         }
 
-        // Properties
         public string StatusMessage
         {
             get => _statusMessage;
@@ -44,12 +54,18 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
             set => SetProperty(ref _isBusy, value);
         }
 
+        public bool IsDemoAi => _researchAgent.IsDemoProvider;
+
+        public string AiProviderLabel => _researchAgent.IsDemoProvider
+            ? "AI Research Agent (demo insights)"
+            : "AI Research Agent";
+
         public ProjectInfo? CurrentProject
         {
             get => _currentProject;
-            set 
+            set
             {
-                if(SetProperty(ref _currentProject, value))
+                if (SetProperty(ref _currentProject, value))
                 {
                     OnPropertyChanged(nameof(ProjectName));
                     OnPropertyChanged(nameof(ServerCount));
@@ -61,13 +77,12 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
         public string ProjectName => _currentProject?.ProjectName ?? "No Project Loaded";
         public int ServerCount => _currentProject?.Servers?.Count ?? 0;
 
-        // Charting
         public ISeries[] IOPSSeries { get; set; } = Array.Empty<ISeries>();
         public ISeries[] ThroughputSeries { get; set; } = Array.Empty<ISeries>();
+        public string ChartEmptyMessage { get; set; } = "Load a Live Optics export with performance series to plot charts.";
 
         public ObservableCollection<string> AiInsights { get; } = new();
 
-        // Commands
         public ICommand LoadFileCommand { get; }
         public ICommand GenerateReportCommand { get; }
         public ICommand AnalyzeWithAiCommand { get; }
@@ -141,18 +156,25 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
             try
             {
                 IsBusy = true;
-                StatusMessage = "AI Agent Requesting Analysis...";
+                StatusMessage = _researchAgent.IsDemoProvider
+                    ? "AI Agent Requesting Analysis (demo)..."
+                    : "AI Agent Requesting Analysis...";
 
                 AiInsights.Clear();
+
+                if (_researchAgent.IsDemoProvider)
+                {
+                    AiInsights.Add("[DEMO] Insights below are simulated and not produced by a live LLM.");
+                }
 
                 var analysis = await _researchAgent.AnalyzePerformanceAsync("High Latency detected on Disk 0");
                 AiInsights.Add(analysis);
 
                 if (_currentProject.Servers != null)
                 {
-                    foreach(var server in _currentProject.Servers)
+                    foreach (var server in _currentProject.Servers)
                     {
-                        if(server.CPUCount > 32)
+                        if (server.CPUCount > 32)
                         {
                             var hardwareResearch = await _researchAgent.ResearchHardwareAsync("High Core Count Server");
                             AiInsights.Add($"Server {server.ServerName}: {hardwareResearch}");
@@ -175,29 +197,14 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
 
         private void UpdateCharts()
         {
-            // Dummy data for visualization if parsing didn't find time-series
-            IOPSSeries = new ISeries[]
-            {
-                new LineSeries<double>
-                {
-                    Values = new double[] { 200, 500, 1200, 800, 1500, 4000, 2000 },
-                    Name = "Total IOPS",
-                    Fill = null
-                }
-            };
-            
-            ThroughputSeries = new ISeries[]
-            {
-                new LineSeries<double>
-                {
-                    Values = new double[] { 100, 250, 600, 400, 750, 2000, 1000 },
-                    Name = "Throughput (MB/s)",
-                    Fill = null
-                }
-            };
-            
+            // Do not fabricate series. Real performance parsing is tracked in
+            // openspec/changes/liveoptics-performance-data and qa-fix-dummy-charts.
+            IOPSSeries = Array.Empty<ISeries>();
+            ThroughputSeries = Array.Empty<ISeries>();
+            ChartEmptyMessage = "No performance series in this export yet (parser stub).";
             OnPropertyChanged(nameof(IOPSSeries));
             OnPropertyChanged(nameof(ThroughputSeries));
+            OnPropertyChanged(nameof(ChartEmptyMessage));
         }
     }
 }

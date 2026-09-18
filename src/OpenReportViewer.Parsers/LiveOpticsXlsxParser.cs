@@ -4,16 +4,25 @@ using System.IO;
 using System.Data;
 using ExcelDataReader;
 using OpenReportViewer.Core.Models;
+using OpenReportViewer.Core.Interfaces;
 
-namespace OpenReportViewer.Core.Services
+namespace OpenReportViewer.Parsers
 {
     public interface ILiveOpticsParser
     {
         ProjectInfo ParseFile(string filePath);
     }
 
-    public class LiveOpticsXlsxParser : ILiveOpticsParser
+    public class LiveOpticsXlsxParser : ILiveOpticsParser, IDataParser
     {
+        public bool CanParse(string filePath)
+        {
+            return !string.IsNullOrWhiteSpace(filePath)
+                && filePath.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase);
+        }
+
+        public ProjectInfo Parse(string filePath) => ParseFile(filePath);
+
         public ProjectInfo ParseFile(string filePath)
         {
             if (string.IsNullOrWhiteSpace(filePath))
@@ -95,6 +104,23 @@ namespace OpenReportViewer.Core.Services
             // Performance series not implemented yet (see openspec/changes/liveoptics-performance-data).
             // Keep history empty so the UI can show an empty state instead of fabricated metrics.
             Console.WriteLine("LiveOpticsXlsxParser: performance series parse not implemented; history left empty.");
+        }
+    }
+}
+
+namespace OpenReportViewer.Parsers
+{
+    using Microsoft.Extensions.DependencyInjection;
+    using OpenReportViewer.Core.Interfaces;
+
+    public static class ParserServiceCollectionExtensions
+    {
+        public static IServiceCollection AddOpenReportViewerParsers(this IServiceCollection services)
+        {
+            services.AddSingleton<LiveOpticsXlsxParser>();
+            services.AddSingleton<ILiveOpticsParser>(sp => sp.GetRequiredService<LiveOpticsXlsxParser>());
+            services.AddSingleton<IDataParser>(sp => sp.GetRequiredService<LiveOpticsXlsxParser>());
+            return services;
         }
     }
 }

@@ -4,18 +4,23 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Presentation;
 using OpenReportViewer.Core.Models;
+using OpenReportViewer.Core.Interfaces;
 using A = DocumentFormat.OpenXml.Drawing;
 using P = DocumentFormat.OpenXml.Presentation;
 
-namespace OpenReportViewer.Core.Services
+namespace OpenReportViewer.Reporting
 {
-    public interface IReportGenerator
+    public interface IPptxReportGenerator
     {
         void GeneratePresentation(ProjectInfo project, string outputPath);
     }
 
-    public class ReportGeneratorService : IReportGenerator
+    public class ReportGeneratorService : IPptxReportGenerator, OpenReportViewer.Core.Interfaces.IReportGenerator
     {
+        public string Format => "pptx";
+
+        public void Generate(ProjectInfo project, string outputPath) => GeneratePresentation(project, outputPath);
+
         public void GeneratePresentation(ProjectInfo project, string outputPath)
         {
             ArgumentNullException.ThrowIfNull(project);
@@ -172,6 +177,23 @@ namespace OpenReportViewer.Core.Services
                 var slideLayoutPart = slideMasterPart.SlideLayoutParts.First();
                 slidePart.AddPart(slideLayoutPart, "rId1");
             }
+        }
+    }
+}
+
+namespace OpenReportViewer.Reporting
+{
+    using Microsoft.Extensions.DependencyInjection;
+    using OpenReportViewer.Core.Interfaces;
+
+    public static class ReportingServiceCollectionExtensions
+    {
+        public static IServiceCollection AddOpenReportViewerReporting(this IServiceCollection services)
+        {
+            services.AddSingleton<ReportGeneratorService>();
+            services.AddSingleton<IPptxReportGenerator>(sp => sp.GetRequiredService<ReportGeneratorService>());
+            services.AddSingleton<IReportGenerator>(sp => sp.GetRequiredService<ReportGeneratorService>());
+            return services;
         }
     }
 }
