@@ -2,6 +2,7 @@ using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using OpenReportViewer.AI;
 using OpenReportViewer.Core.Configuration;
+using OpenReportViewer.Core.Diagnostics;
 using OpenReportViewer.Parsers;
 using OpenReportViewer.Reporting;
 using OpenReportViewer.UI.Wpf.ViewModels;
@@ -23,6 +24,8 @@ namespace OpenReportViewer.UI.Wpf
             sc.AddOpenReportViewerParsers();
             sc.AddOpenReportViewerReporting();
             sc.AddOpenReportViewerPdf();
+            sc.AddOpenReportViewerHtml();
+            sc.AddOpenReportViewerLogging();
             sc.AddOpenReportViewerAI();
             sc.AddSingleton<MainViewModel>();
             _services = sc.BuildServiceProvider();

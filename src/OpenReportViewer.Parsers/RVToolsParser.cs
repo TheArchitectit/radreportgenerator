@@ -192,10 +192,12 @@ namespace OpenReportViewer.Parsers
     public class ParserFactory
     {
         private readonly IEnumerable<IDataParser> _parsers;
+        private readonly OpenReportViewer.Core.Diagnostics.IAppLog? _log;
 
-        public ParserFactory(IEnumerable<IDataParser> parsers)
+        public ParserFactory(IEnumerable<IDataParser> parsers, OpenReportViewer.Core.Diagnostics.IAppLog? log = null)
         {
             _parsers = parsers;
+            _log = log;
         }
 
         public IDataParser Resolve(string filePath)
@@ -204,10 +206,19 @@ namespace OpenReportViewer.Parsers
             {
                 if (p.CanParse(filePath)) return p;
             }
+            _log?.Warn($"No parser matched: {filePath}");
             throw new InvalidOperationException($"No parser can handle file: {filePath}");
         }
 
-        public ProjectInfo Parse(string filePath) => Resolve(filePath).Parse(filePath);
+        public ProjectInfo Parse(string filePath)
+        {
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            var parser = Resolve(filePath);
+            var project = parser.Parse(filePath);
+            sw.Stop();
+            _log?.Info($"Parsed {Path.GetFileName(filePath)} via {parser.GetType().Name} in {sw.ElapsedMilliseconds}ms; VMs={project.VirtualMachines.Count} hosts={project.Hosts.Count} servers={project.Servers.Count}");
+            return project;
+        }
     }
 }
 

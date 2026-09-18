@@ -1,6 +1,6 @@
 # Tasks
 
-- [ ] 1.1 Add logging packages
+- [x] 1.1 Add logging packages
 - [ ] 1.2 IDebugService + DebugService
 - [ ] 1.3 Parser instrumentation
 - [ ] 1.4 Report generation timings

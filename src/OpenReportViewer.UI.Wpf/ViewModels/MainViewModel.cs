@@ -8,6 +8,7 @@ using OpenReportViewer.Core.Interfaces;
 using OpenReportViewer.Parsers;
 using OpenReportViewer.AI;
 using OpenReportViewer.Reporting;
+using OpenReportViewer.Core.Diagnostics;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
@@ -23,6 +24,8 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
         private readonly IAnalysisService _researchAgent;
         private readonly IPptxReportGenerator _reportGenerator;
         private readonly IPdfReportGenerator? _pdfGenerator;
+        private readonly ReportFormatFactory? _formatFactory;
+        private readonly IAppLog? _log;
 
         private ProjectInfo? _currentProject;
         private string _statusMessage = "Ready";
@@ -33,7 +36,7 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
                 new ParserFactory(new IDataParser[] { new RVToolsParser(), new LiveOpticsXlsxParser() }),
                 new ResearchAgentService(),
                 new ReportGeneratorService(),
-                new QuestPdfReportGenerator())
+                new QuestPdfReportGenerator(), formatFactory: null, log: null)
         {
         }
 
@@ -41,12 +44,16 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
             ParserFactory parserFactory,
             IAnalysisService researchAgent,
             IPptxReportGenerator reportGenerator,
-            IPdfReportGenerator? pdfGenerator = null)
+            IPdfReportGenerator? pdfGenerator = null,
+            ReportFormatFactory? formatFactory = null,
+            IAppLog? log = null)
         {
             _parserFactory = parserFactory;
             _researchAgent = researchAgent;
             _reportGenerator = reportGenerator;
             _pdfGenerator = pdfGenerator;
+            _formatFactory = formatFactory;
+            _log = log;
 
             LoadFileCommand = new RelayCommand(LoadFile);
             GenerateReportCommand = new RelayCommand(GenerateReport, _ => _currentProject != null);
@@ -142,7 +149,7 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
 
             var dialog = new SaveFileDialog
             {
-                Filter = "PDF report|*.pdf|PowerPoint Presentation|*.pptx",
+                Filter = "PDF report|*.pdf|PowerPoint Presentation|*.pptx|HTML report|*.html",
                 FileName = $"Report_{_currentProject.ProjectName}_{DateTime.Now:yyyyMMdd}.pdf"
             };
 
@@ -152,7 +159,18 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
                 {
                     IsBusy = true;
                     var ext = Path.GetExtension(dialog.FileName).ToLowerInvariant();
-                    if (ext == ".pdf")
+                    if (ext == ".html" || ext == ".htm")
+                    {
+                        if (_formatFactory == null)
+                        {
+                            StatusMessage = "HTML generator not registered";
+                            return;
+                        }
+                        StatusMessage = "Generating HTML...";
+                        await Task.Run(() => _formatFactory.Generate(_currentProject, dialog.FileName));
+                        _log?.Info($"HTML report written: {dialog.FileName}");
+                    }
+                    else if (ext == ".pdf")
                     {
                         if (_pdfGenerator == null)
                         {
