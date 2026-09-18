@@ -1,4 +1,4 @@
-# OpenReportViewer
+﻿# OpenReportViewer
 
 Windows WPF application that ingests Dell Live Optics / RVTools assessment data (`.xlsx`), visualizes key performance metrics, and generates PowerPoint reports. Includes a demo research-agent sidebar (simulated insights).
 
@@ -11,20 +11,20 @@ See [`openspec/QA-REVIEW.md`](openspec/QA-REVIEW.md) and [`openspec/sprints/`](o
 
 | Area | Actual state |
 |------|----------------|
-| Solution | `OpenReportViewer.sln` → `src/OpenReportViewer.*` |
+| Solution | `OpenReportViewer.sln` â†’ `src/OpenReportViewer.*` |
 | Build | `dotnet build` green after Sprint 0/1 path+rename work |
-| Reports | PowerPoint (`.pptx`) only — PDF/HTML are OpenSpec roadmap items |
+| Reports | PowerPoint (`.pptx`) + QuestPDF PDF MVP; HTML still OpenSpec roadmap |
 | AI sidebar | **Demo/mock** insights, not a live LLM |
 | Charts | Not yet bound to parsed performance series (OpenSpec `qa-fix-dummy-charts`) |
 
-Planning docs under `docs/` describe an enterprise roadmap. Treat unchecked/false “COMPLETED” claims there as aspirational until OpenSpec changes are archived.
+Planning docs under `docs/` describe an enterprise roadmap. Treat unchecked/false â€œCOMPLETEDâ€ claims there as aspirational until OpenSpec changes are archived.
 
 ## Features
 
-* **Excel ingest** — Live Optics `.xlsx` via ExcelDataReader
-* **Dashboard** — project name, server count, chart placeholders
-* **Research agent (demo)** — simulated analysis text in the sidebar
-* **PPTX export** — title, executive summary, AI-insights placeholder slides
+* **Excel ingest** â€” Live Optics `.xlsx` via ExcelDataReader
+* **Dashboard** â€” project name, server count, chart placeholders
+* **Research agent (demo)** â€” simulated analysis text in the sidebar
+* **PPTX export** â€” title, executive summary, AI-insights placeholder slides
 
 ## Prerequisites
 
@@ -72,9 +72,9 @@ Output: `Installer/OpenReportViewerSetup.exe`
 ## Usage
 
 1. Run `OpenReportViewer.UI.Wpf.exe`
-2. **Load .xlsx** — select a Live Optics export
+2. **Load .xlsx** â€” select a Live Optics export
 3. Review dashboard metrics / demo AI sidebar
-4. **Generate Report** — save a `.pptx`
+4. **Generate Report** â€” save a `.pptx`
 
 ## Project structure
 
@@ -109,3 +109,5 @@ Branch policy: trunk-based on `main` with short-lived feature branches (see `ope
 ## License
 
 BSD-3-Clause. See `LICENSE`.
+
+

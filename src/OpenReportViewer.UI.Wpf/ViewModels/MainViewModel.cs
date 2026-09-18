@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using Microsoft.Win32;
 using OpenReportViewer.Core.Models;
@@ -18,24 +19,27 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
         private readonly LiveOpticsXlsxParser _parser;
         private readonly IAnalysisService _researchAgent;
         private readonly IPptxReportGenerator _reportGenerator;
+        private readonly IPdfReportGenerator? _pdfGenerator;
 
         private ProjectInfo? _currentProject;
         private string _statusMessage = "Ready";
         private bool _isBusy;
 
         public MainViewModel()
-            : this(new LiveOpticsXlsxParser(), new ResearchAgentService(), new ReportGeneratorService())
+            : this(new LiveOpticsXlsxParser(), new ResearchAgentService(), new ReportGeneratorService(), new QuestPdfReportGenerator())
         {
         }
 
         public MainViewModel(
             LiveOpticsXlsxParser parser,
             IAnalysisService researchAgent,
-            IPptxReportGenerator reportGenerator)
+            IPptxReportGenerator reportGenerator,
+            IPdfReportGenerator? pdfGenerator = null)
         {
             _parser = parser;
             _researchAgent = researchAgent;
             _reportGenerator = reportGenerator;
+            _pdfGenerator = pdfGenerator;
 
             LoadFileCommand = new RelayCommand(LoadFile);
             GenerateReportCommand = new RelayCommand(GenerateReport, _ => _currentProject != null);
@@ -123,8 +127,8 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
 
             var dialog = new SaveFileDialog
             {
-                Filter = "PowerPoint Presentation|*.pptx",
-                FileName = $"Report_{_currentProject.ProjectName}_{DateTime.Now:yyyyMMdd}.pptx"
+                Filter = "PDF report|*.pdf|PowerPoint Presentation|*.pptx",
+                FileName = $"Report_{_currentProject.ProjectName}_{DateTime.Now:yyyyMMdd}.pdf"
             };
 
             if (dialog.ShowDialog() == true)
@@ -132,9 +136,22 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
                 try
                 {
                     IsBusy = true;
-                    StatusMessage = "Generating PPTX...";
-
-                    await Task.Run(() => _reportGenerator.GeneratePresentation(_currentProject, dialog.FileName));
+                    var ext = Path.GetExtension(dialog.FileName).ToLowerInvariant();
+                    if (ext == ".pdf")
+                    {
+                        if (_pdfGenerator == null)
+                        {
+                            StatusMessage = "PDF generator not registered";
+                            return;
+                        }
+                        StatusMessage = "Generating PDF...";
+                        await Task.Run(() => _pdfGenerator.GenerateToFile(_currentProject, dialog.FileName));
+                    }
+                    else
+                    {
+                        StatusMessage = "Generating PPTX...";
+                        await Task.Run(() => _reportGenerator.GeneratePresentation(_currentProject, dialog.FileName));
+                    }
                     StatusMessage = "Report Generated: " + dialog.FileName;
                 }
                 catch (Exception ex)

@@ -22,6 +22,7 @@ namespace OpenReportViewer.UI.Wpf
             sc.AddOpenReportViewerCore();
             sc.AddOpenReportViewerParsers();
             sc.AddOpenReportViewerReporting();
+            sc.AddOpenReportViewerPdf();
             sc.AddOpenReportViewerAI();
             sc.AddSingleton<MainViewModel>();
             _services = sc.BuildServiceProvider();

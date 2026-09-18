@@ -22,7 +22,7 @@
 
 ### Phase 1: Reporting Engine (Sprints 3-8) — NOT STARTED IN CODE
 
-- **Sprint 3 (Weeks 5-6):** PDF Generation MVP — **NOT IMPLEMENTED**
+- **Sprint 3 (Weeks 5-6):** PDF Generation MVP — **IMPLEMENTED 2026-09-18** (QuestPDF cover/summary/inventory; charts/TOC still open)
   - QuestPDF integration — **absent**
   - Base report templates — **absent**
   - WPF export dialog for PDF — **absent** (PPTX only)
@@ -50,9 +50,14 @@ All **planned only**. See OpenSpec changes for gated work.
 - Sprint 2: modular architecture, DI, real chart binding, honest AI labeling
 - Sprint 3+: PDF, RVTools, performance series (see sprints README)
 
+### IMPLEMENTED IN SPRINT 3 ✅ (2026-09-18)
+
+- QuestPDF MVP: cover, executive summary, server inventory table, page numbers
+- UI export filter PDF/PPTX
+- 3 PDF unit tests (58 total)
+
 ### NOT IMPLEMENTED ❌
 
-- QuestPDF / PDF reports
 - RVTools parser
 - Performance time-series parsing
 - HTML reports, Web API, Docker/K8s, ML, SSO, multi-tenancy
