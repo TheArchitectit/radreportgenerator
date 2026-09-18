@@ -56,6 +56,7 @@ namespace OpenReportViewer.Core.Configuration
         public static IServiceCollection AddOpenReportViewerLogging(this IServiceCollection services)
         {
             services.AddSingleton<IAppLog, FileAppLog>();
+            services.AddSingleton<IDebugService, DebugService>();
             return services;
         }
     }
