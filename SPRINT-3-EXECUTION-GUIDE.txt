@@ -7,6 +7,7 @@ This guide is a draft for future OpenSpec change pdf-generation-questpdf.
 QuestPDF is NOT present in src/ as of 2026-09-18. Sample C# below is not
 normative until reviewed and compiled against OpenReportViewer.Reporting.
 
+Fixed sample signatures: ComposeCoverPage(container, data), ComposeExecutiveSummary(container, data).
 Branch policy: trunk-based on main (see openspec/changes/qa-fix-git-branch-workflow).
 Do NOT require a develop branch that does not exist.
 
@@ -176,7 +177,7 @@ namespace OpenReportViewer.Reporting
             });
         }
         
-        private void ComposeCoverPage(IContainer container)
+        private void ComposeCoverPage(IContainer container, IReportData data)
         {
             container.PaddingTop(8, Unit.Centimetre).AlignCenter().Column(column =>
             {
@@ -186,12 +187,12 @@ namespace OpenReportViewer.Reporting
             });
         }
         
-        private void ComposeExecutiveSummary(IContainer container)
+        private void ComposeExecutiveSummary(IContainer container, IReportData data)
         {
             container.Column(column =>
             {
                 column.Item().Text("Executive Summary").FontSize(16).Bold();
-                column.Item().PaddingTop(10).Text("This report provides infrastructure analysis based on provided data export.");
+                column.Item().PaddingTop(10).Text($"Project data: {data.VirtualMachines.Count} VMs on {data.Hosts.Count} hosts.");
             });
         }
         
@@ -200,7 +201,8 @@ namespace OpenReportViewer.Reporting
             container.AlignCenter().Text(x =>
             {
                 x.Span("Page ");
-                x.CurrentPageNumber();\n                x.Span(" of ");
+                x.CurrentPageNumber();
+                x.Span(" of ");
                 x.TotalPages();
             });
         }

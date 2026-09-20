@@ -1,7 +1,7 @@
 # Tasks
 
 ## 1. Project
-- [ ] 1.1 Create OpenReportViewer.Reporting
+- [x] 1.1 Create OpenReportViewer.Reporting
 - [x] 1.2 Add QuestPDF package reference
 - [x] 1.3 Solution + ProjectReference wiring
 

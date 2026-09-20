@@ -27,6 +27,7 @@ namespace OpenReportViewer.UI.Wpf
             sc.AddOpenReportViewerHtml();
             sc.AddOpenReportViewerLogging();
             sc.AddOpenReportViewerAI();
+            sc.AddOpenReportViewerHeuristicAi();
             sc.AddSingleton<MainViewModel>();
             _services = sc.BuildServiceProvider();
         }

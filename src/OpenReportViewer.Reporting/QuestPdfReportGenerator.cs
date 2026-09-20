@@ -62,6 +62,8 @@ namespace OpenReportViewer.Reporting
                             column.Item().PageBreak();
                             column.Item().Element(c => ComposeTopVms(c, project));
                         }
+                        column.Item().PageBreak();
+                        column.Item().Element(c => PdfChartEmbedder.ComposeProjectCharts(c, project));
                     });
                     page.Footer().AlignCenter().Text(text =>
                     {

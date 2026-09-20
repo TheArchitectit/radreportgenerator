@@ -28,6 +28,10 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
         private readonly ReportFormatFactory? _formatFactory;
         private readonly IAppLog? _log;
         private readonly ChartProviderFactory _chartFactory = new();
+        private readonly IExternalAnalysisProvider _externalAi = new OpenAiCompatibleAnalysisService(
+            Environment.GetEnvironmentVariable("OPENAI_BASE_URL"),
+            Environment.GetEnvironmentVariable("OPENAI_API_KEY"),
+            Environment.GetEnvironmentVariable("OPENAI_MODEL") ?? "gpt-4o-mini");
 
         private ProjectInfo? _currentProject;
         private string _statusMessage = "Ready";
@@ -74,11 +78,9 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
             set => SetProperty(ref _isBusy, value);
         }
 
-        public bool IsDemoAi => _researchAgent.IsDemoProvider;
+        public string AiProviderLabel => $"AI Research Agent ({_externalAi.ProviderName})";
 
-        public string AiProviderLabel => _researchAgent.IsDemoProvider
-            ? "AI Research Agent (demo insights)"
-            : "AI Research Agent";
+        public bool IsDemoAi => _externalAi.IsDemoProvider && _researchAgent.IsDemoProvider;
 
         public ProjectInfo? CurrentProject
         {
@@ -214,14 +216,18 @@ namespace OpenReportViewer.UI.Wpf.ViewModels
 
                 AiInsights.Clear();
 
+                var request = AnalysisRequestFactory.FromProject(_currentProject);
+                var external = await _externalAi.AnalyzeAsync(request);
+                foreach (var line in external)
+                    AiInsights.Add(line);
+
                 if (_researchAgent.IsDemoProvider)
                 {
-                    AiInsights.Add("[DEMO] Insights below are simulated and not produced by a live LLM.");
+                    AiInsights.Add("[DEMO] Optional simulated agent lines follow (not from assessment data).");
+                    var analysis = await _researchAgent.AnalyzePerformanceAsync(
+                        $"Source={_currentProject.SourceType}, VMs={VmCount}, Hosts={HostCount}");
+                    AiInsights.Add(analysis);
                 }
-
-                var analysis = await _researchAgent.AnalyzePerformanceAsync(
-                    $"Source={_currentProject.SourceType}, VMs={VmCount}, Hosts={HostCount}");
-                AiInsights.Add(analysis);
 
                 var hosts = _currentProject.Hosts;
                 if (hosts is { Count: > 0 })

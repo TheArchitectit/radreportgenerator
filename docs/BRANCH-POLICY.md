@@ -19,3 +19,6 @@ git push origin main
 ```
 
 OpenSpec: `openspec/changes/qa-fix-git-branch-workflow/`
+
+
+**2026-09-18 closure:** Optional develop branch **not created**. Trunk-based main remains the policy (OpenSpec qa-fix-git-branch-workflow task 1.3 closed as N/A by decision).
